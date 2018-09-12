@@ -1,0 +1,4 @@
+<launch>
+<node name="count_node" pkg="counter" type="code_counter.py" output="screen">
+</node>
+</launch>
