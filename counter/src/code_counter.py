@@ -35,9 +35,13 @@ allCount=0
 imgname='_'
 def call_inc(data):
 	global imgname
+	global allCount
+	print "=",time.ctime(time.time()),"========="
 	print "img:",imgname
 	print "num:",data.data
 	fout.write(imgname+","+str(data.data)+'\n')
+	allCount=allCount+data.data
+	print "tot:",allCount
 # def call_inc
 
 rospy.init_node('count_node')
