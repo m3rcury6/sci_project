@@ -1,0 +1,4 @@
+<launch>
+  <node name="image_input" pkg="image_input" type="image_input.py" output="screen">
+</node>
+</launch>
