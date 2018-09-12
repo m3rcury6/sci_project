@@ -27,14 +27,23 @@ print 'currently located at:',os.getcwd()
 # 2.0: create write file (csv) in order to log detections ######################
 fname = "out_"+str(time.time())+".csv"
 fout = file(fname,'w')
-fout.write('colA,colB')
-fout.close()
+fout.write('imgname,cone_count\n')
 
+
+# 3.0: initialize node with counters, variables, etc ###########################
+allCount=0
+imgname='_'
 def call_inc(data):
-	print "i heard something",time.time()
+	global imgname
+	print "img:",imgname
+	print "num:",data.data
+	fout.write(imgname+","+str(data.data)+'\n')
+# def call_inc
 
 rospy.init_node('count_node')
 # pub_txt = rospy.Publisher('talk_node',String,queue_size=10)
 rospy.Subscriber('count_topic',UInt8,call_inc,queue_size=10)
+
+# 99: main loop ################################################################
 while(not rospy.is_shutdown()):
 	rospy.spin()
