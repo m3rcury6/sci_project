@@ -50,7 +50,7 @@ for val in range(len(image_list)):
 	'''
 
 val = 0	#kills ROS node once finished with all images
-raw_input('press ENTER to continue... ')
+raw_input('Press ENTER to continue... ')
 print 'publishing images...'
 while(not rospy.is_shutdown() and val < len(image_list)):
 	print 'publishing:',str(image_list[val])
