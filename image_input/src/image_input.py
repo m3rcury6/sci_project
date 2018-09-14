@@ -25,6 +25,7 @@ print read_path
 if(not os.path.exists(read_path)):
 	print "error, path below doesn't exist. creating..."
 	print 'currently located at:',os.getcwd()
+	os.mkdir(read_path)
 os.chdir(read_path)
 print 'currently located at : ',os.getcwd()
 
