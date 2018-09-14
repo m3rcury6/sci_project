@@ -28,25 +28,34 @@ def qs(img):
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
+img_name = ''
+def call_name(data):
+	global img_name
+	img_name = data.data
 
 def call_img(data):
-	print 'i heard something'
-def call_name(data):
-	print 'img name:',data.data
+	print "=",time.ctime(time.time()),"========="
+	print 'img',img_name,'loaded. detecting contours...'
+	img = CvBridge().imgmsg_to_cv2(data,"bgr8")
+	(_,all_contours,__) = cv2.findContours(select_rgb_mask(img),1,2)
+	print 'found:',len(all_contours)
+	pubstr = img_name+','+str(len(all_contours))
+	print pubstr
+	pub_result.publish(pubstr)
+
 
 rospy.init_node('detector_color')
 rospy.Subscriber('images',Image,call_img,queue_size=10)
 rospy.Subscriber('image_name',String,call_name,queue_size=10)
 pub_result = rospy.Publisher('detector_result',String,queue_size=10)
 
-itemp=0
+print 'waiting for data...'
 while(not rospy.is_shutdown()):
-	# temporary stuff to check connectivity with counter
-	itemp=itemp+1
-	time.sleep(1)
-	pubstr='img_'+str(itemp)+','+str(itemp*2)
-	print pubstr
-	pub_result.publish(pubstr)
-	# temp stuff
-
-	# rospy.spin() # this is proper thing to do. will only publish when new image is processed.
+	# # temporary stuff to check connectivity with counter
+	# itemp=itemp+1
+	# time.sleep(1)
+	# pubstr='img_'+str(itemp)+','+str(itemp*2)
+	# print pubstr
+	# pub_result.publish(pubstr)
+	# # temp stuff
+	rospy.spin() # this is proper thing to do. will only publish when new image is processed.
