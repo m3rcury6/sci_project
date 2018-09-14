@@ -50,8 +50,11 @@ for val in range(len(image_list)):
 	'''
 
 val = 0	#kills ROS node once finished with all images
+raw_input('press ENTER to continue... ')
+print 'publishing images...'
 while(not rospy.is_shutdown() and val < len(image_list)):
+	print 'publishing:',str(image_list[val])
 	pub_image.publish(CvBridge().cv2_to_imgmsg(image[val], "bgr8"))
-	pub_image_name.publish('Current image: ' + str(image_list[val]))
+	pub_image_name.publish(str(image_list[val]))
 	time.sleep(0.01)
 	val += 1
