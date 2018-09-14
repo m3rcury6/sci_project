@@ -32,21 +32,20 @@ fout.write('imgname,cone_count\n')
 
 # 3.0: initialize node with counters, variables, etc ###########################
 allCount=0
-imgname='_'
-def call_inc(data):
-	global imgname
+def call_result(combined):
+	(imgname,ct)=combined.data.split(',')
 	global allCount
 	print "=",time.ctime(time.time()),"========="
 	print "img:",imgname
-	print "num:",data.data
-	fout.write(imgname+","+str(data.data)+'\n')
-	allCount=allCount+data.data
+	print "num:",ct
+	fout.write(combined.data+'\n')
+	allCount=allCount+int(ct)
 	print "tot:",allCount
-# def call_inc
+# def call_result
 
 rospy.init_node('count_node')
 # pub_txt = rospy.Publisher('talk_node',String,queue_size=10)
-rospy.Subscriber('count_topic',UInt8,call_inc,queue_size=10)
+rospy.Subscriber('detector_result',String,call_result,queue_size=10)
 
 # 99: main loop ################################################################
 while(not rospy.is_shutdown()):
