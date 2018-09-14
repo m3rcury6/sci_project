@@ -54,7 +54,7 @@ raw_input('Press ENTER to continue... ')
 print 'publishing images...'
 while(not rospy.is_shutdown() and val < len(image_list)):
 	print 'publishing:',str(image_list[val])
-	pub_image.publish(CvBridge().cv2_to_imgmsg(image[val], "bgr8"))
 	pub_image_name.publish(str(image_list[val]))
-	time.sleep(0.01)
+	pub_image.publish(CvBridge().cv2_to_imgmsg(image[val], "bgr8"))
+	time.sleep(0.1)
 	val += 1
