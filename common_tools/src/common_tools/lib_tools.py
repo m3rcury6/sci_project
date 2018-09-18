@@ -4,6 +4,9 @@ Objective: This file (module) provides central, simplified location to keep
     functions and classes that are used across multiple nodes or code files. In
     this way, can avoid repeating work or overlapping functions.
 
+Usage: EXAMPLE OF HOW TO CALL THIS MODULE IN OTHER CODE / SHELLS:
+>>> import common_tools.lib_tools as lib
+
 '''
 
 # INITIALIZATIONS ##############################################################
