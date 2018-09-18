@@ -8,3 +8,5 @@ ros based comparison for computer vision
 - in *.txt data, first column is class. 2nd & 3rd refer to row (height) percentage, 4 & 5 refer to column (width)
 - bounding rectangles seem to be drawn from bottom-left to top-right
 - friendly reminder: in opencv, colors are by default BGR (blue-green-red)
+- how to pull safely! use the following command: git pull --rebase
+- how to setup a "common tools" ros package that other python code can access: https://www.youtube.com/watch?v=9bgrzZ45HMA
