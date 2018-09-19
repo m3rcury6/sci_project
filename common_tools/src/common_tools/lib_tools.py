@@ -14,6 +14,7 @@ Usage: EXAMPLE OF HOW TO CALL THIS MODULE IN OTHER CODE / SHELLS:
     # functions and classes in this file
 import numpy as np
 import cv2
+import os
 
 # FUNCTIONS ####################################################################
 def pyt(arr):
@@ -102,5 +103,13 @@ def countBoxes(boxfile):
             # row has a blue cone, increment
             count=count+1
     # print boxfile,':',str(count)
-    f=file.close()
+    f.close()
     return count
+
+def folderCountAll():
+    ''' in a single folder, check each image and count all boxes. return total.
+    '''
+    total=0
+    for ifile in os.listdir('.'):
+        total=total+countBoxes(ifile)
+    return total
