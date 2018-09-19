@@ -1,0 +1,6 @@
+Name / description,Link
+tutorial and help with darknet / yolo v2,https://pjreddie.com/darknet/yolo/
+pytorch general help (specifically data loading),https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
+How to import python modules from different ROS packages,https://www.youtube.com/watch?v=9bgrzZ45HMA
+yolo object detection and brief history of object classification and detection,https://www.youtube.com/watch?v=4eIBisqx9_g&vl=en
+possible help with installing cudnn, https://docs.nvidia.com/deeplearning/sdk/cudnn-install/index.html
