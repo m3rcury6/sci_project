@@ -25,6 +25,7 @@ def pyt(arr):
         sum=sum+i**2
     return sum**0.5
 
+def qs(img,title='CLOSE WITH KEYBOARD'):
     cv2.imshow(title,img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
@@ -109,7 +110,8 @@ def countBoxes(boxfile):
 def folderCountAll():
     ''' in a single folder, check each image and count all boxes. return total.
     '''
-    total=0
+    tot=0
     for ifile in os.listdir('.'):
-        total=total+countBoxes(ifile)
-    return total
+        if('.txt' in ifile):
+            tot=tot+countBoxes(ifile)
+    return tot
