@@ -15,9 +15,14 @@ ros based comparison for computer vision
 # progress on darknet side:
 - having trouble with tutorial... cuda issue:
 - issue with cuda: don't seem to have right architecture or settings. sent a message to stan about this, he mentions that it was not necessary to change any of those settings.
-- sep19,15:00 - was able to get darknet running on webcam data. however, may be a long road to testing with cones. recall, this is with 
+- sep19,15:00 - was able to get darknet running on webcam data. however, may be a long road to testing with cones. recall, this is with
+
 # random helpful commands
 - nvidia-smi: outputs basic information about installed nvidia hardware as well as current usage
 
+# progress on traditional methods:
+- things figured out: HOG algorithm implementation (histogram data, image), SIFT algorithm implementation, SVM creation + training + predicting, Boosting prediction method
+- Working on: ROS Node for HOG Algorithm + SVM, Saving of ROIs from an image in required format for training data set.
+- Still to figure out: How to use the common_tools
 
 # eof
