@@ -118,7 +118,8 @@ def folderCountAll():
 
 class ImgTextPair(object):
     ''' Objective: container class for an image / text pair. image will be a cv2
-        image class. text will be an Nx4 numpy array of bounding boxes.
+        image class. text will be an Nx4 numpy array of bounding boxes. note
+        that a single pair can contain multiple bounding boxes.
     Assumptions:
         * This is class intends the user to access member variables directly (not
         just through member functions)
