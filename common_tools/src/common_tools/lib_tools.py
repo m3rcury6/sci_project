@@ -115,3 +115,45 @@ def folderCountAll():
         if('.txt' in ifile):
             tot=tot+countBoxes(ifile)
     return tot
+
+class ImgTextPair(object):
+    ''' Objective: container class for an image / text pair. image will be a cv2
+        image class. text will be an Nx4 numpy array of bounding boxes.
+    Assumptions:
+        * This is class intends the user to access member variables directly (not
+        just through member functions)
+
+    '''
+    def __init__(self, img=np.zeros((3,3,3),dtype=np.uint8), boxes=np.ndarray((0,4)) ):
+        self.img = img # default initialize as blank
+        self.boxes = boxes # default initialize as empty
+    # at this point, have all items defined...?
+
+    def _LoadFromFile(self,filename):
+        ''' Objective: If want to directly load an image from storage, can run
+            this. the danger with this function is that a user may accidentally
+            load the same image/text combination twice through oversight in a
+            forloop.
+        '''
+        if('.' in filename):
+            fname = filename.split('.')[0]
+        else:
+            fname = filename
+        self.img = cv2.imread(fname+'.jpg')
+        self.boxes = getBoxes(fname+'.txt',self.img.shape)
+    # def _LoadFromFile
+# class ImgTextPair
+
+
+
+
+
+
+
+
+
+
+
+
+
+#eof
