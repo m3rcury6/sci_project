@@ -1,4 +1,4 @@
 <launch>
-	<node name="hog_algorithm" pkg="trad_hog_alg" type="trad_hog_alg.py" output="screen">
+	<node name="hog_algorithm_node" pkg="trad_hog_alg" type="trad_hog_alg.py" output="screen">
 	</node>
 </launch>
