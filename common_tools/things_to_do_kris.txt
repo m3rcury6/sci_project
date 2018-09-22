@@ -1,0 +1,6 @@
+main goals: 
+train pytorch
+figure out how to test your current ai
+write up your results
+combine the two nodes into one
+
