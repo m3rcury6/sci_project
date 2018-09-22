@@ -20,7 +20,7 @@ ros based comparison for computer vision
 # random helpful commands
 - nvidia-smi: outputs basic information about installed nvidia hardware as well as current usage
 
-# note: had to do some simplification on the dataset. removed all photos that didn't contain blue cones, and removed white cone labels. generalsteps: 
+# note: had to do some simplification on the dataset. removed all photos that didn't contain blue cones, and removed white cone labels. generalsteps:
   part 1
     1. load an image/text combo
     2. check if it has any blue cones
@@ -36,17 +36,18 @@ ros based comparison for computer vision
 
 # note: yolo training command (as of 2018-sep-22):
 cd ~/Desktop/temp_delme/darknet
-./darknet detector train data/obj/obj.data data/obj/yolov3-tiny.cfg darknet19_448.conv.23 
+./darknet detector train data/obj/obj.data data/obj/yolov3-tiny.cfg darknet19_448.conv.23
 
 =======
 
 # random helpful commands
 - nvidia-smi: outputs basic information about installed nvidia hardware as well as current usage
 
-# progress on traditional methods:
-- things figured out: HOG algorithm implementation (histogram data, image), SIFT algorithm implementation, SVM creation + training + predicting, Boosting prediction method
+# progress on traditional methods: (2018.Sep.21)
+- things figured out: HOG algorithm implementation (histogram data, image), SIFT algorithm implementation, SVM creation + training + predicting, common_tools usage
 - Working on: ROS Node for HOG Algorithm + SVM, Saving of ROIs from an image in required format for training data set.
-- Still to figure out: How to use the common_tools
+- Issues facing: Does the /input node publish only the testing dataset?? If yes, then needed the
+training_set images, so that the SVM is pre-trained.
 >>>>>>> 8b4c4893d06569468f3bd08a466da31441074486
 
 # eof
