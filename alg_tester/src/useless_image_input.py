@@ -14,9 +14,10 @@ from cv_bridge import CvBridge
 import os
 import cv2
 
-rospy.init_node('image_input')
-pub_image = rospy.Publisher('images', Image, queue_size=10)
-pub_image_name = rospy.Publisher('image_name', String, queue_size=10)
+# # kjgnote: not using this section
+# rospy.init_node('image_input')
+# pub_image = rospy.Publisher('images', Image, queue_size=10)
+# pub_image_name = rospy.Publisher('image_name', String, queue_size=10)
 
 # 1.0: Ensure read path is available ##########################################
 read_path = argv[1]
