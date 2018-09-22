@@ -15,9 +15,27 @@ ros based comparison for computer vision
 # progress on darknet side:
 - having trouble with tutorial... cuda issue:
 - issue with cuda: don't seem to have right architecture or settings. sent a message to stan about this, he mentions that it was not necessary to change any of those settings.
-- sep19,15:00 - was able to get darknet running on webcam data. however, may be a long road to testing with cones. recall, this is with 
+- sep19,15:00 - was able to get darknet running on webcam data. however, may be a long road to testing with cones. recall, this is with
 # random helpful commands
 - nvidia-smi: outputs basic information about installed nvidia hardware as well as current usage
+
+# note: had to do some simplification on the dataset. removed all photos that didn't contain blue cones, and removed white cone labels. generalsteps: 
+  part 1
+    1. load an image/text combo
+    2. check if it has any blue cones
+    3. if yes, close and move on
+    4. if no, close files, delete the pair, move on
+    5. repeat
+  part 2:
+    1. for all text files
+    2. check if there is any line in a given text file with '0'
+    3. if yes, delete that line, then find next, then move on
+    4. if no, close file, move on
+    5. repeat
+
+# note: yolo training command (as of 2018-sep-22):
+cd ~/Desktop/temp_delme/darknet
+./darknet detector train data/obj/obj.data data/obj/yolov3-tiny.cfg darknet19_448.conv.23 
 
 
 # eof
