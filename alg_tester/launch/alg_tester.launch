@@ -1,0 +1,10 @@
+<launch>
+	<arg name="read_path"  default = "$(find image_input)/../../input"/>
+	<arg name="write_path" default=     "$(find counter)/../../output"/>
+	<node name="alg_tester_node"
+      	pkg ="alg_tester"
+        type="code_alg_tester.py"
+        args="$(arg read_path) $(arg write_path)"
+        output="screen">
+	</node>
+</launch>
