@@ -11,8 +11,6 @@ General Steps:
 4. receive counter value and save to array / file (image name, cone detection)
 
 
-NOTES:
-sections marked as *.1 are for 'read' / initial items
 '''
 
 # 0.0 Initializations ##########################################################
@@ -36,25 +34,12 @@ if(not os.path.exists(read_path)):
 	print "error, path below doesn't exist. creating..."
 	print 'currently located at:',os.getcwd()
 	os.mkdir(read_path)
+else:
+	print 'Success: read path:',read_path
 os.chdir(read_path)
-print 'currently located at : ',os.getcwd()
 
 
-print 'kjgnote: here :)'
-exit()
-
-# 1.2: Ensure write path is available ##########################################
-write_path = argv[2] # second argument from system
-print 'path:'
-print write_path
-if(not os.path.exists(write_path)):
-	print "error, path below doesn't exist. creating..."
-	print write_path
-	os.mkdir(write_path)
-os.chdir(write_path)
-print 'currently located at:',os.getcwd()
-
-# 2.1: load all images to be output into single list ###########################
+# 1.2: load all images to be output into single list ###########################
 image_list = []
 image = []
 valid_images = [".jpg"]
@@ -66,12 +51,19 @@ for filename in os.listdir(read_path):
 
 for val in range(len(image_list)):
 	image.append(cv2.imread(str(image_list[val]), 1))
-	'''
-	TO VIEW EACH IMAGE remove this comment
-	cv2.imshow(str(image_list[val]),image[val])
-	cv2.waitKey(0)
-	cv2.destroyAllWindows()
-	'''
+
+
+# 2.1: Ensure write path is available ##########################################
+write_path = argv[2] # second argument from system
+print 'path:'
+print write_path
+if(not os.path.exists(write_path)):
+	print "error, path below doesn't exist. creating..."
+	print write_path
+	os.mkdir(write_path)
+else:
+	print 'Success: write path:', write_path
+os.chdir(write_path)
 
 
 # 2.2: create write file (csv) in order to log detections ######################
@@ -80,6 +72,8 @@ fout = file(fname,'w')
 fout.write('imgname,cone_count\n')
 
 # KJGNOTE: need to correct things after this point.
+print 'kjgnote: here :)'
+exit()
 
 
 # 3.0: initialize node with counters, variables, etc ###########################
@@ -95,17 +89,22 @@ def call_result(combined):
 	print "tot:",allCount
 # def call_result
 
-rospy.init_node('count_node')
+rospy.init_node('alg_tester_node')
 # pub_txt = rospy.Publisher('talk_node',String,queue_size=10)
 rospy.Subscriber('detector_result',String,call_result,queue_size=10)
+pub_image = rospy.Publisher('images', Image, queue_size=10)
+pub_image_name = rospy.Publisher('image_name', String, queue_size=10)
 
 
-
-val = 0	#kills ROS node once finished with all images
 raw_input('Press ENTER to continue... ')
 print 'publishing images...'
 
+val = 0	#kills ROS node once finished with all images
+flag_go_next=False
 
+while(not rospy.is_shutdown() and val < len(image_list)):
+	# want to send out an image, wait (with timelimit), then take in counter
+	
 
 
 # 99: main loop ################################################################
