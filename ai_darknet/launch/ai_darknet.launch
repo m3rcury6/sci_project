@@ -4,11 +4,13 @@
 * Keep in mind that first argument here is 2nd argument in program (aka index 1)
  -->
 <launch>
-  <arg name = "files" default = "$(find ai_darknet)"/>
+  <arg name="data"    default = "$(find ai_darknet)/data/obj.data"/>
+  <arg name="cfg"     default = "$(find ai_darknet)/data/yolov3-tiny.cfg"/>
+  <arg name="weights" default = "$(find ai_darknet)/data/idk.weights"/>
   <node name = "ai_darknet_node"
         pkg = "ai_darknet"
         type = "ai_darknet"
-        args = "$(arg files)"
+        args = "$(arg data) $(arg cfg) $(arg weights)"
         output = "screen">
   </node>
 </launch>

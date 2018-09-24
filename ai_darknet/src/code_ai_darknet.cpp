@@ -14,6 +14,21 @@ STATUS | DESCRIPTION
 #include "ros/ros.h"
 #include "std_msgs/String.h"
 #include <sstream>
+//libraries included in Detector.cpp (from fstw)
+#include <image_transport/image_transport.h>
+#include <opencv2/highgui/highgui.hpp>
+#include <cv_bridge/cv_bridge.h>
+
+//KJG_Sep24: was originally "CDarknet.h", but changing to "darknet.h" worked...
+#include "darknet.h" //requires change in CMakeLists.txt file
+
+#include <ros/console.h>
+
+
+
+
+
+
 
 void chatter_Callback(const std_msgs::String::ConstPtr& msg){
 	ROS_INFO("I heard: [%s]",msg->data.c_str());
