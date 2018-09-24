@@ -2,15 +2,22 @@
 * Below demonstrates how to use roslaunch with cpp program and input arguments
 * Argument 'type' is same as 2nd argument in: rosrun ai_darknet ai_darknet
 * Keep in mind that first argument here is 2nd argument in program (aka index 1)
+
+* weights file (yolov3-tiny_900.weights) was chosen because it wasnt "perfect"
+    and was result of only a few hours of training. may be worthwhile to
+    retrain and cut off after a certain time limit (7 hours?)
  -->
 <launch>
-  <arg name="data"    default = "$(find ai_darknet)/data/obj.data"/>
-  <arg name="cfg"     default = "$(find ai_darknet)/data/yolov3-tiny.cfg"/>
-  <arg name="weights" default = "$(find ai_darknet)/data/idk.weights"/>
+  <arg name="dat" default="$(find ai_darknet)/data/obj.data"/>
+  <arg name="cfg" default="$(find ai_darknet)/data/yolov3-tiny.cfg"/>
+  <arg name="wts" default="$(find ai_darknet)/data/weights_Sep23/yolov3-tiny_900.weights"/>
+  <arg name="s_n" default="image_name"/>
+  <arg name="s_i" default="images"/>
+  <arg name="p_r" default="detector_result"/>
   <node name = "ai_darknet_node"
-        pkg = "ai_darknet"
-        type = "ai_darknet"
-        args = "$(arg data) $(arg cfg) $(arg weights)"
-        output = "screen">
+    pkg = "ai_darknet"
+    type = "ai_darknet"
+    args = "$(arg dat) $(arg cfg) $(arg wts) $(arg s_n) $(arg s_i) $(arg p_r)"
+    output = "screen">
   </node>
 </launch>
