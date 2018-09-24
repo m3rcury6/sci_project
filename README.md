@@ -34,10 +34,12 @@ ros based comparison for computer vision
     4. if no, close file, move on
     5. repeat
 
-# note: yolo training command (as of 2018-sep-22):
+# note: darknet training command (as of 2018-sep-22):
 cd ~/Desktop/temp_delme/darknet
 ./darknet detector train data/obj/obj.data data/obj/yolov3-tiny.cfg darknet19_448.conv.23
 
+additionally, here is an example darknet testing command (that works for own trained network):
+./darknet detector test data/obj/obj.data data/obj/yolov3-tiny.cfg backup/yolov3-tiny_20000.weights data/obj/cone_imgs/01_52.jpg
 =======
 
 # random helpful commands
