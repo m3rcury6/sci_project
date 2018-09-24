@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(ai_darknet)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
+add_compile_options(-std=c++11)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -10,13 +10,16 @@ project(ai_darknet)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
+#  sensor_msg
+  image_transport
+  cv_bridge
 #  std_msgs
 #  genmsg
 )
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
-
+find_package(OpenCV 3 REQUIRED)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -104,10 +107,10 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES ai_darknet
+# INCLUDE_DIRS include
+# LIBRARIES ai_darknet
 #  CATKIN_DEPENDS roscpp rospy
-#  DEPENDS system_lib
+# DEPENDS system_lib
 )
 
 ###########
@@ -117,7 +120,8 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+  ./darknet_lib/include
+  ./darknet_lib/src
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -204,5 +208,3 @@ target_link_libraries(ai_darknet ${catkin_LIBRARIES})
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
-
-
