@@ -1,0 +1,14 @@
+<!--
+* Below demonstrates how to use roslaunch with cpp program and input arguments
+* Argument 'type' is same as 2nd argument in: rosrun ai_darknet ai_darknet
+* Keep in mind that first argument here is 2nd argument in program (aka index 1)
+ -->
+<launch>
+  <arg name = "files" default = "$(find ai_darknet)"/>
+  <node name = "ai_darknet_node"
+        pkg = "ai_darknet"
+        type = "ai_darknet"
+        args = "$(arg files)"
+        output = "screen">
+  </node>
+</launch>
