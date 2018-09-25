@@ -72,18 +72,20 @@ fout.write('imgname,cone_count\n')
 
 # 3.0: initialize node with counters, variables, etc ###########################
 allCount=0
-flag_nextimg=False
+flag_go_next=False
+
 def call_result(combined):
     # expecting data in string format as "imgname,count"
     (imgname,ct)=combined.data.split(',')
     global allCount
+    global flag_go_next
     print "=",time.ctime(time.time()),"========="
     print "img:",imgname
     print "num:",ct
     fout.write(combined.data+'\n') # write out to file
     allCount=allCount+int(ct)
     print "tot:",allCount
-    flag_nextimg=True
+    flag_go_next=True
 # def call_result
 
 rospy.init_node('alg_tester_node')
@@ -101,7 +103,6 @@ print 'publishing images...'
 # exit()
 
 val = 0    #kills ROS node once finished with all images
-flag_go_next=False
 max_wait_time=3.0 #seconds
 
 # 99: main loop ################################################################
@@ -109,6 +110,7 @@ while(not rospy.is_shutdown() and val < len(image_list)):
     # want to send out an image, wait (with timelimit), then take in counter
     print 'publishing:',str(image_list[val])
     pub_image_name.publish(str(image_list[val]))
+    time.sleep(0.01)# small delay to ensure name is published first
     pub_image.publish(CvBridge().cv2_to_imgmsg(image[val],"bgr8"))
     flag_go_next=False
     starttime=time.time()
