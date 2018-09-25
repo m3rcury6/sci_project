@@ -31,7 +31,12 @@ General Steps of program:
 #include <iostream>
 
 //KJG_Sep24: was originally "CDarknet.h", but changing to "darknet.h" worked...
-#include "darknet.h" //requires change in CMakeLists.txt file
+#include "CDarknet.h" //requires change in CMakeLists.txt file
+
+
+CDarknet* pDarknet = nullptr;
+
+
 
 ros::Publisher pub_res; // need to declare here to use in functions
 std::string IMG_NAME ("empty");
@@ -43,12 +48,21 @@ void call_name(const std_msgs::String::ConstPtr& msg){
 //  std::cout << "in string:"<<IMG_NAME<<"\n";
 }// void call_name
 
-void call_image(const sensor_msgs::ImageConstPtr& msg){
+void call_image(const sensor_msgs::ImageConstPtr& imgmsg){
   try{
     ROS_INFO("recieved: %s",IMG_NAME.c_str());
 
-    // here, should try out an algorithm
+    // here, will test an algorithm
 
+//    pDarknet->SetInput(cv_bridge::toCvShare(imgmsg, "rgb8")->image);
+    // ConeDetection::bbox_array oMessage = pDarknet->Forward();
+    // oMessage.header.stamp = imgmsg->header.stamp;
+    // oDetectionPublisher.publish(oMessage);
+    //
+    // KJGNOTE: this below section was to publish a new image. won't do this
+    // sensor_msgs::ImagePtr newmsg = cv_bridge::CvImage(std_msgs::Header(), "rgb8", pDarknet->GetDetections()).toImageMsg();
+    //
+    // pub2.publish(newmsg);
 
 
     // once complete, algorithm returns an integer value
@@ -57,23 +71,13 @@ void call_image(const sensor_msgs::ImageConstPtr& msg){
 		std_msgs::String msg_res;
 		msg_res.data = IMG_NAME;
 		pub_res.publish(msg_res);
-
-		// pDarknet->SetInput(cv_bridge::toCvShare(msg, "rgb8")->image);
-    // ConeDetection::bbox_array oMessage = pDarknet->Forward();
-    // oMessage.header.stamp = msg->header.stamp;
-    // oDetectionPublisher.publish(oMessage);
-		//
-    // sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "rgb8", pDarknet->GetDetections()).toImageMsg();
-		//
-    // pub2.publish(msg);
-
-    ros::spinOnce(); //kjgnote: is this necessary here?
+		ros::spinOnce(); //kjgnote: is this necessary here?
 
    // cv::imshow("view", cv_bridge::toCvShare(msg, "bgr8")->image);
  }//try
   catch (cv_bridge::Exception& e){
 		ROS_ERROR("kjgnote: somehow ended up here while debugging...");
-    ROS_ERROR("Could not convert from '%s' to 'bgr8'.", msg->encoding.c_str());
+    ROS_ERROR("Could not convert from '%s' to 'bgr8'.", imgmsg->encoding.c_str());
   }//catch
 }//void call_image
 
