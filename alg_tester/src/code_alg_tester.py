@@ -48,6 +48,7 @@ for filename in os.listdir(read_path):
         continue
     image_list.append(filename)
 # at this point, have list of image names
+image_list.sort()
 
 for val in range(len(image_list)):
     image.append(cv2.imread(str(image_list[val]), 1))
@@ -101,6 +102,7 @@ print 'publishing images...'
 
 val = 0    #kills ROS node once finished with all images
 flag_go_next=False
+max_wait_time=3.0 #seconds
 
 # 99: main loop ################################################################
 while(not rospy.is_shutdown() and val < len(image_list)):
@@ -112,7 +114,7 @@ while(not rospy.is_shutdown() and val < len(image_list)):
     starttime=time.time()
     while(not flag_go_next):
         # waiting for next thing to do
-        if(time.time()-starttime>1.0):
+        if(time.time()-starttime>max_wait_time):
             # have waited n seconds, move on to next image.
             print 'time limit reached, moving to next image...  '
             flag_go_next=True
@@ -120,7 +122,7 @@ while(not rospy.is_shutdown() and val < len(image_list)):
     # at this point, will move onto next image
     val=val+1
 # main while loop
-
+print 'all images loaded. node closing...'
 
 
 # eof
