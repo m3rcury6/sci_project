@@ -1,8 +1,0 @@
-<launch>
-<!-- note on arguments: -->
-	<arg name="a1"/>
-	<arg name="a2"/>
-<node name="talk_node" pkg="talker" type="code_talker.py"
-	output="screen">
-</node>
-</launch>

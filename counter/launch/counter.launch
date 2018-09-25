@@ -1,7 +1,0 @@
-<launch>
-	<arg name="write_path" default="$(find counter)/../../output"/>
-	<node name="count_node" pkg="counter" type="code_counter.py"
-		args="$(arg write_path)"
-		output="screen">
-	</node>
-</launch>

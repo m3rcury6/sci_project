@@ -1,5 +1,0 @@
-<launch>
-  <arg name = "read_path" default = "$(find image_input)/../../input"/>
-  <node name = "image_input" pkg = "image_input" type = "image_input.py" args = "$(arg read_path)" output = "screen">
-  </node>
-</launch>
