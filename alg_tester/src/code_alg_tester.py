@@ -95,7 +95,7 @@ pub_image = rospy.Publisher('images', Image, queue_size=10)
 pub_image_name = rospy.Publisher('image_name', String, queue_size=10)
 
 
-raw_input('Press ENTER to continue... ')
+# raw_input('Press ENTER to continue... ') # disabling this for debugging
 print 'publishing images...'
 
 # # KJGNOTE: need to correct things after this point.
