@@ -19,19 +19,23 @@ General Steps of program:
 */
 
 // 0.0 initializations =========================================================
-#include "ros/ros.h"
-#include "std_msgs/String.h"
-#include <sstream>
-//libraries included in Detector.cpp (from fstw)
+#include <ros/ros.h>
 #include <image_transport/image_transport.h>
 #include <opencv2/highgui/highgui.hpp>
 #include <cv_bridge/cv_bridge.h>
+#include "CDarknet.h" //requires change in CMakeLists.txt file
 #include <ros/console.h>
-#include <string>
+
+#include "std_msgs/String.h"
+#include <sstream>
+#include <string> //kjgnote: may not be necessary
 #include <iostream>
 
-//KJG_Sep24: was originally "CDarknet.h", but changing to "darknet.h" worked...
-#include "CDarknet.h" //requires change in CMakeLists.txt file
+// just including to have a random number generator (for fun)
+#include <math.h>
+#include <cstdlib>
+#include <ctime>
+
 
 
 CDarknet* pDarknet = nullptr;
@@ -54,8 +58,9 @@ void call_image(const sensor_msgs::ImageConstPtr& imgmsg){
 
     // here, will test an algorithm
 
-//    pDarknet->SetInput(cv_bridge::toCvShare(imgmsg, "rgb8")->image);
-    // ConeDetection::bbox_array oMessage = pDarknet->Forward();
+    // pDarknet->SetInput(cv_bridge::toCvShare(imgmsg, "rgb8")->image);
+    // ai_darknet::bbox_array oMessage = pDarknet->Forward();
+    
     // oMessage.header.stamp = imgmsg->header.stamp;
     // oDetectionPublisher.publish(oMessage);
     //
@@ -66,7 +71,12 @@ void call_image(const sensor_msgs::ImageConstPtr& imgmsg){
 
 
     // once complete, algorithm returns an integer value
-    int res = 4; //this would be the result after img processing has happened
+
+    // for the moment, just return a random number (just to have it)
+    float rvar = std::rand();
+    rvar = rvar/RAND_MAX*10;
+    int res = round(rvar);
+    // int res = 4; //this would be the result after img processing has happened
 		IMG_NAME = IMG_NAME + ","+std::to_string(res);
 		std_msgs::String msg_res;
 		msg_res.data = IMG_NAME;
