@@ -75,26 +75,26 @@ void CDarknet::AllocBuffer(const cv::Mat &oMat) {
     m_oImageBuffer.data = (float*)malloc(sizeof(float)*m_nHeight*m_nWidth*m_nChannels);
     ROS_INFO("Image: %d %d %d",m_nWidth,m_nHeight,m_nChannels);
 	floatMatChannels.resize(3);
-}	
+}
 
-ConeDetection::bbox_array CDarknet::Forward() {
+ai_darknet::bbox_array CDarknet::Forward() {
 
     network_predict(m_pNet,(float*)m_oResized.data);
     m_pDetections = get_network_boxes(m_pNet,m_nWidth,m_nHeight,m_fThreshold,m_fHierThreshold,0,1,&m_nDetectionNum);
     do_nms_sort(m_pDetections,m_nDetectionNum,m_nClasses,m_fNMS);
 
    // ROS_INFO("Boxes:%d",m_nDetectionNum);
-  
+
     m_oBBoxArray.header.frame_id = "map";
 
     m_oBBoxArray.bboxes.clear();
-    
+
     int nMaxIndex = 0;
     float fMaxProb = 0.0;
 
     for(int i = 0; i < m_nDetectionNum;i++)
     {
-        
+
         for(int j=0; j < m_nClasses;j++)
         {
          if(m_pDetections[i].prob[j] > fMaxProb)
@@ -103,11 +103,11 @@ ConeDetection::bbox_array CDarknet::Forward() {
              nMaxIndex = j;
          }
         }
-        
+
         if(m_pDetections[i].prob[nMaxIndex] > m_fThreshold)
         {
             //can be added
-            ConeDetection::bbox oBox;
+            ai_darknet::bbox oBox;
             box b = m_pDetections[i].bbox;
             int left  = (b.x-b.w/2.)*m_nWidth;
             int right = (b.x+b.w/2.)*m_nWidth;
@@ -116,7 +116,7 @@ ConeDetection::bbox_array CDarknet::Forward() {
             switch(nMaxIndex)
             {
                 case 0:  //yellow
-                   
+
                     oBox.Class = "yellow";
                     oBox.prob = m_pDetections[i].prob[0];
                     oBox.x = b.x;
@@ -127,7 +127,7 @@ ConeDetection::bbox_array CDarknet::Forward() {
                     cv::rectangle(m_oOriginal,cv::Point(left,top),cv::Point(right,bot),cv::Scalar(255,255,0),1);
                     break;
                 case 1:  //blue
-                   
+
                     oBox.Class = "blue";
                     oBox.prob = m_pDetections[i].prob[1];
                     oBox.x = b.x;
@@ -138,7 +138,7 @@ ConeDetection::bbox_array CDarknet::Forward() {
                     cv::rectangle(m_oOriginal,cv::Point(left,top),cv::Point(right,bot),cv::Scalar(0,0,255),1);
                     break;
                 case 2:  //orange
-                    
+
                     oBox.Class = "orange";
                     oBox.prob = m_pDetections[i].prob[2];
                     oBox.x = b.x;
@@ -149,15 +149,15 @@ ConeDetection::bbox_array CDarknet::Forward() {
                     cv::rectangle(m_oOriginal,cv::Point(left,top),cv::Point(right,bot),cv::Scalar(255,160,0),1);
                     break;
             };
-            
-           
 
-            
-            
+
+
+
+
         }
 
     }
-	
+
     return m_oBBoxArray;
     //fetch detections pointer now
 }
