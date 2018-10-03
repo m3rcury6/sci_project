@@ -3,4 +3,13 @@ tutorial and help with darknet / yolo v2,https://pjreddie.com/darknet/yolo/
 pytorch general help (specifically data loading),https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
 How to import python modules from different ROS packages,https://www.youtube.com/watch?v=9bgrzZ45HMA
 yolo object detection and brief history of object classification and detection,https://www.youtube.com/watch?v=4eIBisqx9_g&vl=en
-possible help with installing cudnn, https://docs.nvidia.com/deeplearning/sdk/cudnn-install/index.html
+possible help with installing cudnn,https://docs.nvidia.com/deeplearning/sdk/cudnn-install/index.html
+installation page for pytorch,https://pytorch.org/get-started/locally/
+pytorch with yolo structure,https://github.com/marvis/pytorch-yolo2/
+pytorch/yolo issue and workaround,https://github.com/marvis/pytorch-yolo2/issues/84
+possible network to consider using for pytorch/darknet stuff,https://gitlab.com/EAVISE/lightnet
+
+
+pytorch classification,https://medium.com/@14prakash/almost-any-image-classification-problem-using-pytorch-i-am-in-love-with-pytorch-26c7aa979ec4
+pytorch official transfer learning,https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html
+classifier training,https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html
