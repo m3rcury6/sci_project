@@ -49,21 +49,22 @@ def getBoxes(boxfile,img_shape,onlyBlue=True):
     # k = np.diag([1,rh,rh,cw,cw]) # will note color for now
     f = file(boxfile)
     for irow_temp in f:
-        color = int(irow_temp[0])
-        if(onlyBlue):
-            if(color==1):
-                irow=irow_temp[:-1] # remove '\n' from txt
-                # will not care about color for now
-                line = irow.split(' ')[1:] # drop color info, in future only care for blue
-                line = np.array([float(i) for i in line]) # now have values in percentage
-                out = np.matmul(line,k) # convert percentages to pixel locations (float)\
-                # at this point, have out as array: [xc,yc,w,h] in pixels
-                x1=out[0]-out[2]/2.0
-                x2=out[0]+out[2]/2.0
-                y1=out[1]-out[3]/2.0
-                y2=out[1]+out[3]/2.0
-                new=np.array([x1,y1,x2,y2])
-                boxes=np.row_stack((boxes,new))
+        # # kjgnote: will not worry about classes for now, just collect all.
+        # color = int(irow_temp[0])
+        # if(onlyBlue):
+        #     if(color==1):
+        irow=irow_temp[:-1] # remove '\n' from txt
+        # will not care about color for now
+        line = irow.split(' ')[1:] # drop color info, in future only care for blue
+        line = np.array([float(i) for i in line]) # now have values in percentage
+        out = np.matmul(line,k) # convert percentages to pixel locations (float)\
+        # at this point, have out as array: [xc,yc,w,h] in pixels
+        x1=out[0]-out[2]/2.0
+        x2=out[0]+out[2]/2.0
+        y1=out[1]-out[3]/2.0
+        y2=out[1]+out[3]/2.0
+        new=np.array([x1,y1,x2,y2])
+        boxes=np.row_stack((boxes,new))
     f.close()
     return boxes.astype(int) # return as integer values
 
@@ -145,8 +146,22 @@ class ImgTextPair(object):
     # def _LoadFromFile
 # class ImgTextPair
 
-
-
+def pad(text,strLen,char=' ',side='L'):
+    ''' Objective: provide easy, powerful padding tool for
+        text. vars:
+        'text': the text to pad
+        'strLen': maximum length of final string
+        'char': padding character, default ' '
+        'side': side to pad, default left. options: L, R
+    '''
+    if(len(text)<strLen):
+        if(side=='R'):
+            return pad(text+char,strLen,char,side)
+        else:
+            return pad(char+text,strLen,char,side)
+    else:
+        return text
+# def pad
 
 
 
