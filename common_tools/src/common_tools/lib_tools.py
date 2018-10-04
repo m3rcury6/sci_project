@@ -47,6 +47,10 @@ def getBoxes(boxfile,img_shape,onlyBlue=True):
     k = np.diag([rh,rh,cw,cw]) # doesn't seem to be right
     k = np.diag([cw,rh,cw,rh]) # almost works.
     # k = np.diag([1,rh,rh,cw,cw]) # will note color for now
+
+    if('.jpg' in boxfile): boxfile = boxfile.split('.')[0] # if img, keep only name
+    if('.' not in boxfile): boxfile = boxfile+'.txt' # if don't have a filetype, add .txt
+
     f = file(boxfile)
     for irow_temp in f:
         # # kjgnote: will not worry about classes for now, just collect all.
@@ -68,7 +72,7 @@ def getBoxes(boxfile,img_shape,onlyBlue=True):
     f.close()
     return boxes.astype(int) # return as integer values
 
-def putBoxes(img,box_array,txtCount=False):
+def putBoxes(img,box_array,txtCount=False,color=(250,0,0)):
     ''' Objective: Return image with augmented information
 
         ARGUMENTS:
@@ -78,12 +82,14 @@ def putBoxes(img,box_array,txtCount=False):
             False)
     '''
     icount=-1
+    # color notes:
     BLU=(250,0,0)
     WHI=(250,250,250)
+
     imgnew=img.copy()
     for ibox in box_array:
         icount=icount+1
-        imgnew=cv2.rectangle(imgnew,tuple(ibox[:2]),tuple(ibox[2:]),BLU)
+        imgnew=cv2.rectangle(imgnew,tuple(ibox[:2]),tuple(ibox[2:]),color)
         if(txtCount==True):
             FONT=cv2.FONT_HERSHEY_PLAIN
             imgnew=cv2.putText(imgnew,str(icount),tuple(ibox[:2]),FONT,1,WHI)
