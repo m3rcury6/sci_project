@@ -8,9 +8,9 @@
     retrain and cut off after a certain time limit (7 hours?)
  -->
 <launch>
-  <arg name="dat" default="$(find ai_darknet)/data/obj.data"/>
-  <arg name="cfg" default="$(find ai_darknet)/data/yolov3-tiny.cfg"/>
-  <arg name="wts" default="$(find ai_darknet)/data/weights_Sep23/yolov3-tiny_900.weights"/>
+  <arg name="dat" default="/home/fstw/vision_project/catkin_ws/src/data_darknet/obj.data"/>
+  <arg name="cfg" default="/home/fstw/vision_project/catkin_ws/src/data_darknet/yolov3-tiny.cfg"/>
+  <arg name="wts" default="/home/fstw/vision_project/catkin_ws/src/data_darknet/weights_Sep23/yolov3-tiny_900.weights"/>
   <arg name="s_n" default="image_name"/>
   <arg name="s_i" default="images"/>
   <arg name="p_r" default="detector_result"/>

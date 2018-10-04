@@ -61,6 +61,7 @@ void call_image(const sensor_msgs::ImageConstPtr& imgmsg){
     pDarknet->SetInput(cv_bridge::toCvShare(imgmsg, "rgb8")->image);
     ai_darknet::bbox_array oMessage = pDarknet->Forward();
 
+    std::cout << "estimated number of cones: " << oMessage.bboxes.size() << '\n';
     // likely now have a message with a specific number of boxes. now, want to
     //   simply count them then publish that number.
 
@@ -76,10 +77,9 @@ void call_image(const sensor_msgs::ImageConstPtr& imgmsg){
 
     // once complete, algorithm returns an integer value
 
-    // for the moment, just return a random number (just to have it)
-    float rvar = std::rand();
-    rvar = rvar/RAND_MAX*10;
-    int res = round(rvar);
+    // float rvar = std::rand();
+    // rvar = rvar/RAND_MAX*10;
+    int res = oMessage.bboxes.size();
     // int res = 4; //this would be the result after img processing has happened
 		IMG_NAME = IMG_NAME + ","+std::to_string(res);
 		std_msgs::String msg_res;
@@ -117,8 +117,13 @@ int main(int argc, char **argv){ //argc / argv enable input arguments
 
 
   // initialize node, etc.
-  ros::init(argc,argv,"ai_darknet_node");
+  const char* nodename = "ai_darknet_node"; // remember to use const char* for string constant
+  ros::init(argc,argv,nodename);
   ros::NodeHandle nh;
+
+  // setup new darknet network object
+  pDarknet = new CDarknet(pDATA,pCFG,pWEIGHT); // initialize
+  pDarknet->SetNClasses(1); // have only one class to identify
 
   // setup subscriber for image
   image_transport::ImageTransport it(nh);
@@ -136,7 +141,7 @@ int main(int argc, char **argv){ //argc / argv enable input arguments
   ros::Rate loop_rate(10);
   int count = 0;
 
-  std::cout<<"starting node...\n";
+  std::cout<< nodename << " started.\n";
   while(ros::ok()){
     ros::spinOnce();
   }//whileloop
