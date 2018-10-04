@@ -105,6 +105,17 @@ print 'publishing images...'
 val = 0    #kills ROS node once finished with all images
 max_wait_time=3.0 #seconds
 
+# going to try publishing initial image to get things going...
+# not sure why, but first image published seems to not send or be lost in buffer
+print 'ESTABLISHING CONNECTION...'
+pub_image_name.publish(str(image_list[val]))
+time.sleep(0.01)# small delay to ensure name is published first
+pub_image.publish(CvBridge().cv2_to_imgmsg(image[val],"bgr8"))
+
+time.sleep(3)
+allCount=0 # reset counter after initial image
+
+
 # 99: main loop ################################################################
 while(not rospy.is_shutdown() and val < len(image_list)):
     # want to send out an image, wait (with timelimit), then take in counter
