@@ -58,9 +58,13 @@ void call_image(const sensor_msgs::ImageConstPtr& imgmsg){
 
     // here, will test an algorithm
 
-    // pDarknet->SetInput(cv_bridge::toCvShare(imgmsg, "rgb8")->image);
-    // ai_darknet::bbox_array oMessage = pDarknet->Forward();
-    
+    pDarknet->SetInput(cv_bridge::toCvShare(imgmsg, "rgb8")->image);
+    ai_darknet::bbox_array oMessage = pDarknet->Forward();
+
+    // likely now have a message with a specific number of boxes. now, want to
+    //   simply count them then publish that number.
+
+
     // oMessage.header.stamp = imgmsg->header.stamp;
     // oDetectionPublisher.publish(oMessage);
     //
