@@ -108,13 +108,16 @@ def countBoxes(boxfile):
     f.close()
     return count
 
-def folderCountAll():
+def folderCountAll(show=False):
     ''' in a single folder, check each image and count all boxes. return total.
     '''
     tot=0
     for ifile in os.listdir('.'):
         if('.txt' in ifile):
-            tot=tot+countBoxes(ifile)
+            itot = countBoxes(ifile)
+            tot+=itot
+            if(show==True):
+                print ifile,itot
     return tot
 
 class ImgTextPair(object):
