@@ -258,29 +258,29 @@ def calcEachIOU(boxes_true,boxes_pred,iou_thresh=0.1):
     return (np.array(iou_list),nFP,nFN) # return tuple
 # def getEachIOU
 
-def pixel2dnet(bboxes_in_pixel,img_shape):
+def pixx2dnet(bboxes_in_pixel,img_shape):
     ''' Convert bounding boxes that are in pixel format (x1,y1,x2,y2) to
     darknet format (pxc,pyc,pw,ph). note 'p' means percentage, 'c' means center
 
     NOTE:
     '''
     bboxes_in_dnet=[]
-    HT=float(img_shape[0])
-    WD=float(img_shape[1])
+    HT=np.double(img_shape[0])
+    WD=np.double(img_shape[1])
     for ibox in bboxes_in_pixel:
         w=ibox[2]-ibox[0]
         h=ibox[3]-ibox[1]
-        xc=ibox[0]+w/2.0
-        yc=ibox[1]+h/2.0
-        pw=float(w)/WD
-        ph=float(h)/HT
+        xc=ibox[0]+(w)/2.0
+        yc=ibox[1]+(h)/2.0
+        pw=np.double(w)/WD
+        ph=np.double(h)/HT
         pxc=xc/WD
         pyc=yc/HT
         bboxes_in_dnet.append([pxc,pyc,pw,ph])
     return np.array(bboxes_in_dnet)
-# def pixel2dnet
+# def pixx2dnet
 
-def dnet2pixel(bboxes_in_dnet,img_shape):
+def dnet2pixx(bboxes_in_dnet,img_shape):
     ''' Convert bounding boxes that are in darknet format (pxc,pyc,pw,ph) to
         pixel format (x1,y1,x2,y2). note 'p' means percentage, 'c' means center
     '''
@@ -293,12 +293,12 @@ def dnet2pixel(bboxes_in_dnet,img_shape):
         w=ibox[2]*WD
         h=ibox[3]*HT
         x1=int(xc-w/2.0)
-        y1=int(yx-w/2.0)
-        x2=int(x1+w)
-        y2=int(y1+h)
+        y1=int(yc-w/2.0)-3 # empirically proven to have less error
+        x2=int(xc+w/2.0) # empirically proven to have less error
+        y2=int(yc+h/2.0) # empirically proven to have less error
         bboxes_in_pixel.append([x1,y1,x2,y2])
     return np.array(bboxes_in_pixel)
-# def dnet2pixel
+# def dnet2pixx
 
 
 #test
