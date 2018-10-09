@@ -175,11 +175,130 @@ def pad(text,strLen,char=' ',side='L'):
         return text
 # def pad
 
+def getIOU(boxA, boxB):
+    ''' given two numpy array bounding boxes (bboxes), return
+        the IOU (%) value of the two.
+    ASSUMPTIONS:
+        * will assume that box format is (x1,y1,x2,y2) in pixels
+    SOURCE: A. Rosebrock, www.pyimagesearch.com
+    '''
+    # determine the (x, y)-coordinates of the intersection rectangle
+    xA = max(boxA[0], boxB[0])
+    yA = max(boxA[1], boxB[1])
+    xB = min(boxA[2], boxB[2])
+    yB = min(boxA[3], boxB[3])
+    interArea = max(0, xB - xA + 1) * max(0, yB - yA + 1)
+    boxAArea = (boxA[2] - boxA[0] + 1) * (boxA[3] - boxA[1] + 1)
+    boxBArea = (boxB[2] - boxB[0] + 1) * (boxB[3] - boxB[1] + 1)
+    iou = interArea / float(boxAArea + boxBArea - interArea)
+    return iou
+# def getIOU
+
+def getCTC(boxA,boxB):
+    ''' Calculate center-to-center distance between two bounding boxes.
+    '''
+    xc1=(boxA[0]+boxA[2])/2.0
+    yc1=(boxA[1]+boxA[3])/2.0
+    xc2=(boxB[0]+boxB[2])/2.0
+    yc2=(boxB[1]+boxB[3])/2.0
+    return ( (xc2-xc1)**2 + (yc2-yc1)**2 )**0.5
+# def getCTC
 
 
 
+def calcEachIOU(boxes_true,boxes_pred,iou_thresh=0.1):
+    ''' Simplifies task of comparing the IOU between a set of true bboxes and
+        a set of predicted bboxes. with two forloops nested in a while loop,
+        the larger data set is the the outer forloop. for each pair of bboxes
+        with the highest IOU larger than some threshold, the IOU is stored and
+        the pair are removed from their respective lists.
 
+        When there are no more pairs to find, the number of false positives (FP)
+        and false negatives (FP) are counted and the results are returned as a
+        tuple: (numpy vector of IOU, scalar FP, scalar FN)
+    '''
 
+    bbt=np.copy(boxes_true) # ensure no changes are made to original arrays
+    bbp=np.copy(boxes_pred)
+    if(len(bbt)>len(bbp)):
+        # more true boxes than prediction boxes
+        set1=bbt # outer loop must be larger than inner loop
+        set2=bbp
+    else:
+        set1=bbp
+        set2=bbt
+    keep_looking=True
+    iou_list=[]
+    while(keep_looking):
+        # may still be able to find more pairs
+        best_i=0
+        best_IOU=0.0
+        for i in range(len(set1)):
+            best_j=0
+            for j in range(len(set2)):
+                new_IOU=getIOU(set1[i],set2[j])
+                if(new_IOU>best_IOU):
+                    best_IOU=new_IOU
+                    best_i=i
+                    best_j=j
+            # j_forloop
+        # i_forloop
+        if(best_IOU>iou_thresh):
+            # able to find two bboxes that overlap. remove them from lists & restart
+            set1=np.delete(set1,best_i,0)
+            set2=np.delete(set2,best_j,0)
+            iou_list.append(best_IOU)
+            keep_looking=True
+        else:
+            # couldn't find any more pairs
+            keep_looking=False
+    # end of while loop
+    nFP = len(bbp)-len(iou_list)
+    nFN = len(bbt)-len(iou_list)
+    return (np.array(iou_list),nFP,nFN) # return tuple
+# def getEachIOU
+
+def pixel2dnet(bboxes_in_pixel,img_shape):
+    ''' Convert bounding boxes that are in pixel format (x1,y1,x2,y2) to
+    darknet format (pxc,pyc,pw,ph). note 'p' means percentage, 'c' means center
+
+    NOTE:
+    '''
+    bboxes_in_dnet=[]
+    HT=float(img_shape[0])
+    WD=float(img_shape[1])
+    for ibox in bboxes_in_pixel:
+        w=ibox[2]-ibox[0]
+        h=ibox[3]-ibox[1]
+        xc=ibox[0]+w/2.0
+        yc=ibox[1]+h/2.0
+        pw=float(w)/WD
+        ph=float(h)/HT
+        pxc=xc/WD
+        pyc=yc/HT
+        bboxes_in_dnet.append([pxc,pyc,pw,ph])
+    return np.array(bboxes_in_dnet)
+# def pixel2dnet
+
+def dnet2pixel(bboxes_in_dnet,img_shape):
+    ''' Convert bounding boxes that are in darknet format (pxc,pyc,pw,ph) to
+        pixel format (x1,y1,x2,y2). note 'p' means percentage, 'c' means center
+    '''
+    bboxes_in_pixel=[]
+    HT=float(img_shape[0])
+    WD=float(img_shape[1])
+    for ibox in bboxes_in_dnet:
+        xc=ibox[0]*WD
+        yc=ibox[1]*HT
+        w=ibox[2]*WD
+        h=ibox[3]*HT
+        x1=int(xc-w/2.0)
+        y1=int(yx-w/2.0)
+        x2=int(x1+w)
+        y2=int(y1+h)
+        bboxes_in_pixel.append([x1,y1,x2,y2])
+    return np.array(bboxes_in_pixel)
+# def dnet2pixel
 
 
 
