@@ -5,7 +5,7 @@ Objective: This file (module) provides central, simplified location to keep
     this way, can avoid repeating work or overlapping functions.
 
 Usage: EXAMPLE OF HOW TO CALL THIS MODULE IN OTHER CODE / SHELLS:
->>> import common_tools.lib_tools as lib
+>>> import common_tools.lib_tools as b
 
 '''
 
@@ -301,6 +301,6 @@ def dnet2pixel(bboxes_in_dnet,img_shape):
 # def dnet2pixel
 
 
-
+#test
 
 #eof
