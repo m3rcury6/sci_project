@@ -44,7 +44,6 @@ def getBoxes(boxfile,img_shape,onlyBlue=True):
     # boxes=np.array([[],[],[],[],[]]).transpose() # 0x5 initialization
     rh=img_shape[0]
     cw=img_shape[1]
-    k = np.diag([rh,rh,cw,cw]) # doesn't seem to be right
     k = np.diag([cw,rh,cw,rh]) # almost works.
     # k = np.diag([1,rh,rh,cw,cw]) # will note color for now
 
@@ -61,7 +60,7 @@ def getBoxes(boxfile,img_shape,onlyBlue=True):
         # will not care about color for now
         line = irow.split(' ')[1:] # drop color info, in future only care for blue
         line = np.array([float(i) for i in line]) # now have values in percentage
-        out = np.matmul(line,k) # convert percentages to pixel locations (float)\
+        out = np.matmul(line,k) # convert percentages to pixel locations (float)
         # at this point, have out as array: [xc,yc,w,h] in pixels
         x1=out[0]-out[2]/2.0
         x2=out[0]+out[2]/2.0
@@ -92,7 +91,7 @@ def putBoxes(img,box_array,txtCount=False,color=(250,0,0)):
         imgnew=cv2.rectangle(imgnew,tuple(ibox[:2]),tuple(ibox[2:]),color)
         if(txtCount==True):
             FONT=cv2.FONT_HERSHEY_PLAIN
-            imgnew=cv2.putText(imgnew,str(icount),tuple(ibox[:2]),FONT,1,WHI)
+            imgnew=cv2.putText(imgnew,str(icount),tuple(ibox[:2]+np.array([0,-2])),FONT,1,color)
         # once complete, return image
     return imgnew
 #
@@ -104,6 +103,10 @@ def countBoxes(boxfile):
         boxfile: filename (e.g. 'img3.txt') of bounding box file
     '''
     count=0
+
+    # following enables file extension to be wrong, so long as filename is correct
+    if('.jpg' in boxfile): boxfile = boxfile.split('.')[0] # if img, keep only name
+    if('.' not in boxfile): boxfile = boxfile+'.txt' # if don't have a filetype, add .txt
     f=file(boxfile)
     for irow in f:
         # print irow
