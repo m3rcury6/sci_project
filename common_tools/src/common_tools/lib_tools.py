@@ -215,7 +215,9 @@ def calcEachIOU(boxes_true,boxes_pred,iou_thresh=0.1):
 
         When there are no more pairs to find, the number of false positives (FP)
         and false negatives (FP) are counted and the results are returned as a
-        tuple: (numpy vector of IOU, scalar FP, scalar FN)
+        tuple: (numpy vector of IOU, scalar FP, scalar FN).
+
+    KJGNOTE: this function still having issues calculating things correctly
     '''
 
     bbt=np.copy(boxes_true) # ensure no changes are made to original arrays
@@ -323,6 +325,7 @@ def saveBoxes(filename,bboxes):
             s=[str(i) for i in irow]
             f.write('0 '+' '.join(s)+'\n')
         # have written everything
+        f.close()
         print 'export complete:',filename
 # def saveBoxes
 
