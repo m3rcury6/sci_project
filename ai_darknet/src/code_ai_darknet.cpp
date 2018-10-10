@@ -82,12 +82,12 @@ void call_image(const sensor_msgs::ImageConstPtr& imgmsg){
 
     // float rvar = std::rand();
     // rvar = rvar/RAND_MAX*10;
-    int res = oMessage.bboxes.size();
+    // int res = oMessage.bboxes.size();
     // int res = 4; //this would be the result after img processing has happened
-		IMG_NAME = IMG_NAME + ","+std::to_string(res);
-		std_msgs::String msg_res;
-		msg_res.data = IMG_NAME;
-		pub_res.publish(msg_res);
+		// IMG_NAME = IMG_NAME + ","+std::to_string(res);
+		// std_msgs::String msg_res;
+		// msg_res.data = IMG_NAME;
+		// pub_res.publish(msg_res);
 		ros::spinOnce(); //kjgnote: is this necessary here?
 
    // cv::imshow("view", cv_bridge::toCvShare(msg, "bgr8")->image);
@@ -136,7 +136,7 @@ int main(int argc, char **argv){ //argc / argv enable input arguments
   ros::Subscriber sub_name = nh.subscribe(arg_subname,1,call_name);
 
   // setup publisher for result
-  pub_res = nh.advertise<std_msgs::String>(arg_pubres,10);
+  // pub_res = nh.advertise<std_msgs::String>(arg_pubres,10);
 
   //setup publisher for bboxes
   pub_bboxes = nh.advertise<ai_darknet::bbox_array>("bboxes",1);
