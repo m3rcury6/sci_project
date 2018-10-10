@@ -5,9 +5,9 @@ note: will also need image information, which is embedded in bboxmsg.header.fram
 
 '''
 
+import rospy
 import cv2
 import numpy as np
-import rospy
 import common_tools.lib_tools as b
 from ai_darknet.msg import bbox
 from ai_darknet.msg import bbox_array
