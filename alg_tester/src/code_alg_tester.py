@@ -20,13 +20,27 @@ import rospy
 import time
 import os
 import cv2
+import numpy as np
 from cv_bridge import CvBridge
 from sys import argv
-import common_tools.lib_tools as lib
+import common_tools.lib_tools as b
 
+from ai_darknet.msg import bbox
+from ai_darknet.msg import bbox_array
 from sensor_msgs.msg import Image
 from std_msgs.msg import String
 from std_msgs.msg import UInt8
+
+def msg2dnet(msg_array):
+    ''' take an array of bbox messages and convert to numpy array of bboxes in
+        dnet format
+    * bbox format: bb[i]: bb[i].prob/pxc/pyc/pw/ph
+    * dnet format: bb[i] = [pxc,pyc,pw,ph]
+    '''
+    bb_dnet=[]
+    for ibb in msg_array:
+        bb_dnet.append([ibb.x,ibb.y,ibb.w,ibb.h])
+    return np.array(bb_dnet)
 
 # 1.1 Ensure read path is available ############################################
 read_path = argv[1]
@@ -74,23 +88,45 @@ fout.write('imgname,cone_count\n')
 allCount=0
 flag_go_next=False
 
-def call_result(combined):
-    # expecting data in string format as "imgname,count"
-    (imgname,ct)=combined.data.split(',')
-    global allCount
-    global flag_go_next
-    print "=",time.ctime(time.time()),"========="
-    print "img:",imgname
-    print "num:",ct
-    fout.write(combined.data+'\n') # write out to file
-    allCount=allCount+int(ct)
-    print "tot:",allCount
-    flag_go_next=True
-# def call_result
+# def call_string(combined):
+#     # expecting data in string format as "imgname,count"
+#     (imgname,ct)=combined.data.split(',')
+#     global allCount
+#     global flag_go_next
+#     print "=",time.ctime(time.time()),"========="
+#     print "img:",imgname
+#     print "num:",ct
+#     fout.write(combined.data+'\n') # write out to file
+#     allCount=allCount+int(ct)
+#     print "tot:",allCount
+#     flag_go_next=True
+# # def call_string
+
+def call_bboxes(dat):
+    ''' mainly, just want to be able to get the
+        bboxes in the right format to save'''
+
+    imgname = dat.header.frame_id
+    bb=dat.bboxes # get all bounding boxes into one array of object
+    bb2=msg2dnet(bb)
+
+    print 'img:',imgname
+    predname = imgname.split('.')[0]+'.pred'
+
+    # # to be re-added: saving to output
+    # print 'saving to folder...'
+    # if(len(bb2)>0):
+    #     b.saveBoxes(outfolder+predname,bb2)
+    # else:
+    #     f=file(outfolder+predname,'w')
+    #     f.close()
+
 
 rospy.init_node('alg_tester_node')
 # pub_txt = rospy.Publisher('talk_node',String,queue_size=10)
-rospy.Subscriber('detector_result',String,call_result,queue_size=10)
+# rospy.Subscriber('detector_result',String,call_string,queue_size=10)
+rospy.Subscriber('bboxes',bbox_array,call_bboxes,queue_size=1)
+
 pub_image = rospy.Publisher('images', Image, queue_size=10)
 pub_image_name = rospy.Publisher('image_name', String, queue_size=10)
 
