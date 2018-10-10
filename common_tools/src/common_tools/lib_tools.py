@@ -300,6 +300,20 @@ def dnet2pixx(bboxes_in_dnet,img_shape):
     return np.array(bboxes_in_pixel)
 # def dnet2pixx
 
+# def saveBoxes(filename,bboxes):
+#     ''' Export array of bounding boxes to text file. extension should be *.pred,
+#         and format of bboxes should be in pixels (dnet). function AUTOMATICALLY
+#         checks if bboxes are in correct format, and will auto-format if
+#         necessary.
+#     ASSUMPTIONS:
+#     * only working with one class ('blue_cones'), so thus will have class column
+#         as '0'
+#     * to avoid tedium of saving two separate bbox formats (pixx and dnet), will
+#     simply export as dnet
+#     '''
+#     sample=bboxes[0,0]
+#     if(type(sample)==type(int))
+#     f=open(filename,'w')
 
 #test
 
