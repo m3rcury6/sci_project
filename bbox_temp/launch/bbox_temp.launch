@@ -1,0 +1,10 @@
+<!--
+* run temporary node to detect bboxes
+ -->
+<launch>
+  <node name = "bbox_temp_node"
+    pkg = "bbox_temp"
+    type = "code_bbox_temp.py"
+    output = "screen">
+  </node>
+</launch>
