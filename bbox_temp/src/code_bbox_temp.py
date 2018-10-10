@@ -41,7 +41,11 @@ def call_bboxes(dat):
     predname = imgname.split('.')[0]+'.pred'
 
     print 'saving to folder...'
-    b.saveB
+    if(len(bb2)>0):
+        b.saveBoxes(outfolder+predname,bb2)
+    else:
+        f=file(outfolder+predname,'w')
+        f.close()
 
 
 rospy.init_node('temp_bboxes_node')
