@@ -43,6 +43,7 @@ CDarknet* pDarknet = nullptr;
 
 
 ros::Publisher pub_res; // need to declare here to use in functions
+ros::Publisher pub_bboxes; // need to declare here to use in functions
 std::string IMG_NAME ("empty");
 //char* IMG_NAME;
 
@@ -62,11 +63,13 @@ void call_image(const sensor_msgs::ImageConstPtr& imgmsg){
     ai_darknet::bbox_array oMessage = pDarknet->Forward();
 
     std::cout << "estimated number of cones: " << oMessage.bboxes.size() << '\n';
+    // kjgnote: oMessage.bboxes is basically a vector object
     // likely now have a message with a specific number of boxes. now, want to
     //   simply count them then publish that number.
 
-
-    // oMessage.header.stamp = imgmsg->header.stamp;
+    oMessage.header.stamp = imgmsg->header.stamp;
+    oMessage.header.frame_id = IMG_NAME.c_str();
+    pub_bboxes.publish(oMessage); //publish actual bounding boxes of img
     // oDetectionPublisher.publish(oMessage);
     //
     // KJGNOTE: this below section was to publish a new image. won't do this
@@ -121,7 +124,7 @@ int main(int argc, char **argv){ //argc / argv enable input arguments
   ros::init(argc,argv,nodename);
   ros::NodeHandle nh;
 
-  // setup new darknet network object
+  // setup new darknet neural network object
   pDarknet = new CDarknet(pDATA,pCFG,pWEIGHT); // initialize
   pDarknet->SetNClasses(1); // have only one class to identify
 
@@ -135,7 +138,8 @@ int main(int argc, char **argv){ //argc / argv enable input arguments
   // setup publisher for result
   pub_res = nh.advertise<std_msgs::String>(arg_pubres,10);
 
-
+  //setup publisher for bboxes
+  pub_bboxes = nh.advertise<ai_darknet::bbox_array>("bboxes",1);
 
 
   ros::Rate loop_rate(10);
