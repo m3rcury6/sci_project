@@ -51,7 +51,7 @@ include_directories(
 )
 
 
-add_executable(ai_darknet src/code_ai_darknet.cpp src/CDarknet.cpp src/CDarknet.h)
-target_link_libraries(ai_darknet ${catkin_LIBRARIES} /usr/local/lib/libdarknet.so)
-add_dependencies(ai_darknet ai_darknet_generate_messages_cpp)
-# target_link_libraries(Detector ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} /usr/local/lib/libdarknet.so) # MAY NEED THIS
+# add_executable(ai_darknet src/code_ai_darknet.cpp src/CDarknet.cpp src/CDarknet.h)
+# target_link_libraries(ai_darknet ${catkin_LIBRARIES} /usr/local/lib/libdarknet.so)
+# add_dependencies(ai_darknet ai_darknet_generate_messages_cpp)
+# # target_link_libraries(Detector ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} /usr/local/lib/libdarknet.so) # MAY NEED THIS
