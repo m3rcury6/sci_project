@@ -204,67 +204,60 @@ def getCTC(boxA,boxB):
     return ( (xc2-xc1)**2 + (yc2-yc1)**2 )**0.5
 # def getCTC
 
-
-
-def calcEachIOU(boxes_true,boxes_pred,iou_thresh=0.1):
+def calcEachIOU(bbt,bbp,thresh=0.0):
     ''' Simplifies task of comparing the IOU between a set of true bboxes and
-        a set of predicted bboxes. with two forloops nested in a while loop,
+        a set of predicted bboxes. With two forloops nested in a while loop,
         the larger data set is the the outer forloop. for each pair of bboxes
         with the highest IOU larger than some threshold, the IOU is stored and
         the pair are removed from their respective lists.
 
         When there are no more pairs to find, the number of false positives (FP)
-        and false negatives (FP) are counted and the results are returned as a
-        tuple: (numpy vector of IOU, scalar FP, scalar FN).
-
-    KJGNOTE: this function still having issues calculating things correctly
+        and false negatives (FP) are counted and the results are returned
+        as a tuple: (numpy vector of IOU, scalar FP, scalar FN).
     '''
+    best_iou=1 # initializer
+    iset=range(len(bbt)) # initialize search set (helps traceability)
+    jset=range(len(bbp))
+    ncount=0 # debugging
+    iou_set=[]
+    bbt_bbp_pairs=[] # currently unused
+    while(best_iou > 0):
+        best_iou = 0.0
+        ibest = 0
+        jbest = 0
+        for i in iset:
+            for j in jset:
+                iou = b.getIOU(bbt[i],bbp[j]) # calculate IOU (b/t 1.0 and 0.0)
+                if(iou>best_iou):
+                    # found a better matching pair, save new info
+                    best_iou = iou
+                    ibest = i
+                    jbest = j
+        # nested forloop to find best iou pair between two indices
+        if(best_iou>thresh):
+            # debugging
+            # ncount+=1; print '= item',ncount,'============='
+            # print '(true,pred):',(ibest,jbest); print 'score:',best_iou
 
-    bbt=np.copy(boxes_true) # ensure no changes are made to original arrays
-    bbp=np.copy(boxes_pred)
-    if(len(bbt)>len(bbp)):
-        # more true boxes than prediction boxes
-        set1=bbt # outer loop must be larger than inner loop
-        set2=bbp
-    else:
-        set1=bbp
-        set2=bbt
-    keep_looking=True
-    iou_list=[]
-    while(keep_looking):
-        # may still be able to find more pairs
-        best_i=0
-        best_IOU=0.0
-        for i in range(len(set1)):
-            best_j=0
-            for j in range(len(set2)):
-                new_IOU=getIOU(set1[i],set2[j])
-                if(new_IOU>best_IOU):
-                    best_IOU=new_IOU
-                    best_i=i
-                    best_j=j
-            # j_forloop
-        # i_forloop
-        if(best_IOU>iou_thresh):
-            # able to find two bboxes that overlap. remove them from lists & restart
-            set1=np.delete(set1,best_i,0)
-            set2=np.delete(set2,best_j,0)
-            iou_list.append(best_IOU)
-            keep_looking=True
-        else:
-            # couldn't find any more pairs
-            keep_looking=False
-    # end of while loop
-    nFP = len(bbp)-len(iou_list)
-    nFN = len(bbt)-len(iou_list)
-    return (np.array(iou_list),nFP,nFN) # return tuple
+            # save results of loop & remove indices
+            iou_set.append(best_iou)
+            bbt_bbp_pairs.append([ibest,jbest]) # currently unused
+            iset.remove(ibest)
+            jset.remove(jbest)
+        # if-iou greater than threshold
+    # while-loop, repeat until no longer find more
+
+    # once complete, find FP and FN and exit
+    FalsePositives=len(bbp)-len(iou_set) # more predictions than pairs
+    FalseNegatives=len(bbt)-len(iou_set) # more true bboxes than pairs
+    tp_pairs=np.array(bbt_bbp_pairs) # unused as of now
+
+    return (np.array(iou_set),FalsePositives,FalseNegatives)
 # def getEachIOU
 
 def pixx2dnet(bboxes_in_pixel,img_shape):
     ''' Convert bounding boxes that are in pixel format (x1,y1,x2,y2) to
     darknet format (pxc,pyc,pw,ph). note 'p' means percentage, 'c' means center
-
-    NOTE:
     '''
     bboxes_in_dnet=[]
     HT=np.double(img_shape[0])
@@ -329,7 +322,22 @@ def saveBoxes(filename,bboxes):
         print 'export complete:',filename
 # def saveBoxes
 
+def compare(name):
+    ''' simple visual comparison tool to load the three files of an image and
+        display them. loads *jpg, *txt, and *pred
+    '''
+    img=cv2.imread(name+'.jpg')
+    bbt=getBoxes(name+'.txt',img.shape)
+    bbp=getBoxes(name+'.pred',img.shape)
+    img2=putBoxes(img,bbt)
+    img2=putBoxes(img2,bbp,color=(0,0,250))
+    qs(img2)
+# def compare
 
-#test
+
+
+
+
+
 
 #eof
