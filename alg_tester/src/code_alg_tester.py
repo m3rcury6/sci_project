@@ -80,8 +80,8 @@ print 'Located at:',os.getcwd()
 
 # 2.2: create write file (csv) in order to log detections ######################
 fname = "out_"+str(time.time())+".csv"
-fout = file(fname,'w')
-fout.write('imgname,cone_count\n')
+# fout = file(fname,'w')
+# fout.write('imgname,cone_count\n')
 
 
 # 3.0: initialize node with counters, variables, etc ###########################
@@ -114,12 +114,14 @@ def call_bboxes(dat):
     predname = imgname.split('.')[0]+'.pred'
 
     # # to be re-added: saving to output
-    # print 'saving to folder...'
-    # if(len(bb2)>0):
-    #     b.saveBoxes(outfolder+predname,bb2)
-    # else:
-    #     f=file(outfolder+predname,'w')
-    #     f.close()
+    print 'saving to folder...'
+    if(len(bb2)>0):
+        b.saveBoxes(write_path+predname,bb2)
+    else:
+        f=file(write_path+predname,'w')
+        f.close()
+    global flag_go_next
+    flag_go_next=True
 
 
 rospy.init_node('alg_tester_node')

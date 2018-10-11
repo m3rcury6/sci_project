@@ -1,6 +1,6 @@
 <launch>
-	<arg name="read_path"  default = "$(find alg_tester)/../../input"/>
-	<arg name="write_path" default=     "$(find alg_tester)/../../output"/>
+	<arg name="read_path"  default = "$(find alg_tester)/../../input/"/>
+	<arg name="write_path" default=     "$(find alg_tester)/../../output/"/>
 	<node name="alg_tester_node"
       	pkg ="alg_tester"
         type="code_alg_tester.py"
