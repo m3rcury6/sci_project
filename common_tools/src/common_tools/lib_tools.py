@@ -42,9 +42,10 @@ def getBoxes(boxfile,img_shape,onlyBlue=True):
     '''
     boxes=np.array([[],[],[],[]]).transpose() # 0x4 initialization
     # boxes=np.array([[],[],[],[],[]]).transpose() # 0x5 initialization
-    rh=img_shape[0]
-    cw=img_shape[1]
-    k = np.diag([cw,rh,cw,rh]) # almost works.
+    rh=np.double(img_shape[0])
+    cw=np.double(img_shape[1])
+    # k = np.diag([cw,rh,cw,rh])
+    k = [cw,rh,cw,rh]
     # k = np.diag([1,rh,rh,cw,cw]) # will note color for now
 
     if('.jpg' in boxfile): boxfile = boxfile.split('.')[0] # if img, keep only name
@@ -52,20 +53,18 @@ def getBoxes(boxfile,img_shape,onlyBlue=True):
 
     f = file(boxfile)
     for irow_temp in f:
-        # # kjgnote: will not worry about classes for now, just collect all.
-        # color = int(irow_temp[0])
-        # if(onlyBlue):
-        #     if(color==1):
+
         irow=irow_temp[:-1] # remove '\n' from txt
         # will not care about color for now
-        line = irow.split(' ')[1:] # drop color info, in future only care for blue
-        line = np.array([float(i) for i in line]) # now have values in percentage
-        out = np.matmul(line,k) # convert percentages to pixel locations (float)
-        # at this point, have out as array: [xc,yc,w,h] in pixels
-        x1=out[0]-out[2]/2.0
-        x2=out[0]+out[2]/2.0
-        y1=out[1]-out[3]/2.0
-        y2=out[1]+out[3]/2.0
+        line = irow.split(' ')[1:] # drop class info, assumes always blue
+        z=[]
+        for i in range(len(line)):
+            z.append(np.double(line[i])*k[i])
+        # at this point, have z as array: [xc,yc,w,h] in pixels
+        x1=z[0]-z[2]/2.0
+        x2=z[0]+z[2]/2.0
+        y1=z[1]-z[3]/2.0
+        y2=z[1]+z[3]/2.0
         new=np.array([x1,y1,x2,y2])
         boxes=np.row_stack((boxes,new))
     f.close()
@@ -227,7 +226,7 @@ def calcEachIOU(bbt,bbp,thresh=0.0):
         jbest = 0
         for i in iset:
             for j in jset:
-                iou = b.getIOU(bbt[i],bbp[j]) # calculate IOU (b/t 1.0 and 0.0)
+                iou = getIOU(bbt[i],bbp[j]) # calculate IOU (b/t 1.0 and 0.0)
                 if(iou>best_iou):
                     # found a better matching pair, save new info
                     best_iou = iou
