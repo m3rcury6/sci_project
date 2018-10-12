@@ -78,8 +78,9 @@ else:
 os.chdir(write_path)
 print 'Located at:',os.getcwd()
 
+# kjgnote: sect 2.2 not needed
 # 2.2: create write file (csv) in order to log detections ######################
-fname = "out_"+str(time.time())+".csv"
+# fname = "out_"+str(time.time())+".csv"
 # fout = file(fname,'w')
 # fout.write('imgname,cone_count\n')
 
@@ -87,20 +88,6 @@ fname = "out_"+str(time.time())+".csv"
 # 3.0: initialize node with counters, variables, etc ###########################
 allCount=0
 flag_go_next=False
-
-# def call_string(combined):
-#     # expecting data in string format as "imgname,count"
-#     (imgname,ct)=combined.data.split(',')
-#     global allCount
-#     global flag_go_next
-#     print "=",time.ctime(time.time()),"========="
-#     print "img:",imgname
-#     print "num:",ct
-#     fout.write(combined.data+'\n') # write out to file
-#     allCount=allCount+int(ct)
-#     print "tot:",allCount
-#     flag_go_next=True
-# # def call_string
 
 def call_bboxes(dat):
     ''' mainly, just want to be able to get the
