@@ -219,7 +219,7 @@ def calcEachIOU(bbt,bbp,thresh=0.0):
     jset=range(len(bbp))
     ncount=0 # debugging
     iou_set=[]
-    bbt_bbp_pairs=[] # currently unused
+    iou_and_tp_pair=[] # currently unused
     while(best_iou > 0):
         best_iou = 0.0
         ibest = 0
@@ -240,7 +240,7 @@ def calcEachIOU(bbt,bbp,thresh=0.0):
 
             # save results of loop & remove indices
             iou_set.append(best_iou)
-            bbt_bbp_pairs.append([ibest,jbest]) # currently unused
+            iou_and_tp_pair.append([best_iou,ibest,jbest]) # currently unused
             iset.remove(ibest)
             jset.remove(jbest)
         # if-iou greater than threshold
@@ -249,9 +249,9 @@ def calcEachIOU(bbt,bbp,thresh=0.0):
     # once complete, find FP and FN and exit
     FalsePositives=len(bbp)-len(iou_set) # more predictions than pairs
     FalseNegatives=len(bbt)-len(iou_set) # more true bboxes than pairs
-    tp_pairs=np.array(bbt_bbp_pairs) # unused as of now
+    ioutp_pairs=np.array(iou_and_tp_pair) # unused as of now
 
-    return (np.array(iou_set),FalsePositives,FalseNegatives)
+    return (np.array(iou_set),FalsePositives,FalseNegatives,ioutp_pairs)
 # def getEachIOU
 
 def pixx2dnet(bboxes_in_pixel,img_shape):
@@ -321,17 +321,30 @@ def saveBoxes(filename,bboxes):
         print 'export complete:',filename
 # def saveBoxes
 
-def compare(name):
-    ''' simple visual comparison tool to load the three files of an image and
-        display them. loads *jpg, *txt, and *pred
+def load_all(name,showNumbers=True,display=False):
+    ''' Simple tool to load the three files of an image. can optionally display
+            them. Loads *jpg, *txt, and *pred files from same basename
+
+        Arguments:
+        * name: string of desired file, without extension. e.g. "IMAG1516"
+        * display: boolean, control if img2 is displayed. default=False
+
+        Returns tuple: (bbt, bbp, img, img2)
+        * bbt: true bounding bboxes
+        * bbp: predicted bounding boxes
+        * img: original image
+        * img2: image with all bboxes overlaid
     '''
     img=cv2.imread(name+'.jpg')
     bbt=getBoxes(name+'.txt',img.shape)
     bbp=getBoxes(name+'.pred',img.shape)
-    img2=putBoxes(img,bbt)
-    img2=putBoxes(img2,bbp,color=(0,0,250))
-    qs(img2)
+    img2=putBoxes(img,bbt,txtCount=showNumbers)
+    img2=putBoxes(img2,bbp,txtCount=showNumbers,color=(0,0,250))
+    if(display==True):
+        qs(img2)
+    return (bbt,bbp,img,img2)
 # def compare
+
 
 
 
