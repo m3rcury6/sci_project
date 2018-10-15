@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 '''
 Author: Kris Gonzalez
 Objective: Given a rosbag, convert to video file (or do whatever else you want
