@@ -45,7 +45,6 @@ for filename in os.listdir(training_path_positive):
     elif ext.lower() in valid_txtfiles:
         text_list.append(filename)
 # You have list of image names and text files
-# print 'Image names and Text files List created'
 image_list.sort()
 text_list.sort()
 for val in range(len(image_list)):
@@ -104,7 +103,20 @@ else:
 os.chdir(training_path_negative)
 print 'Located at:',os.getcwd()
 
-
+## 4.1 READ ALL NEGATIVE IMAGES
+#6.2 Read images
+image_list_n = []
+image_n = []
+valid_images = [".jpg"]
+for filename in os.listdir(training_path_negative):
+    ext = os.path.splitext(filename)[1]
+    if ext.lower() in valid_images:
+        image_list_n.append(filename)
+image_list_n.sort()
+for val in range(len(image_list_n)):
+    image_n.append(cv2.imread(str(image_list_n[val]), 1))
+print 'E. Negative Images list created'
+#print np.shape(image_n)
 
 
 
