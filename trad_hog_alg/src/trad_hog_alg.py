@@ -21,7 +21,7 @@ from std_msgs.msg import String
 import common_tools.lib_tools as lib                            # self-developed library of functions
 from imutils.object_detection import non_max_suppression        # used for NMS of rectangles after detection
 
-## 2. READ PATH OF POSITIVE IMAGES
+## 2.0 READ ALL POSITIVE IMAGES
 training_path_positive = argv[1]
 if(not os.path.exists(training_path_positive)):
     print "Error, path below doesn't exist."
@@ -94,6 +94,25 @@ for data in range(len(image)):
         hog_features.append(h)
 print 'D. HOG computed'
 print np.shape(hog_features)
+
+## 4.0 READ PATH OF NEGATIVE IMAGES
+training_path_negative = '../input_training_negative'
+if(not os.path.exists(training_path_negative)):
+    print "Error, path below doesn't exist."
+else:
+    print 'Success: read training_path_negative found.'
+os.chdir(training_path_negative)
+print 'Located at:',os.getcwd()
+
+
+
+
+
+
+
+
+
+
 
 
 # Gets HOG of image
