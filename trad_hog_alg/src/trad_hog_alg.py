@@ -54,6 +54,32 @@ for val in range(len(image_list)):
 # at this point, have list of image content (cv2 arrays) and image co-ordinates
 print 'Positive Images and Cone Data obtained'
 
+## 2.2 EXTRACT BLUE CONES FROM THE IMAGES USING THE LABEL FILES
+# 2.2.1 Get the ROIs in the images
+roi_val = []
+for i in range(len(image)):
+    size = np.shape(image[i])
+    rh = size[0]
+    cw = size[1]
+    multiplier = np.asarray([1, cw, rh, cw, rh])    #class, xcP, ycP, wdP, htP (P = percentage)
+    roi_val.append(matrix[i] * multiplier)       #xc,yc, wd, ht ;xcP*cw , ycP*rh, wdP*cw, htP*rh (cw=columnwidth, rh=rowheight, which are for image dimensions)
+
+# 2.2.2 Get ROI co-ordinates in the images
+boxes = []
+for values in range(len(roi_val)):
+    box = np.array([[],[],[],[]]).transpose()
+    if roi_val[values].ndim == 1:
+        roi_val[values] = roi_val[values].reshape((1,-1))
+    for val in roi_val[values]:
+        x1 = val[1] - val[3]/2.0
+        x2 = val[1] + val[3]/2.0
+        y1 = val[2] - val[4]/2.0
+        y2 = val[2] + val[4]/2.0
+        new = np.array([x1,y1,x2,y2])
+        box = np.row_stack((box,new))
+    box = box.astype(int)   # co-ordinates need to be in int for pixels
+    boxes.append(box)       # array of co-ord arrays for each image
+print 'ROI co-ordinates obtained'
 
 
 # Gets HOG of image
