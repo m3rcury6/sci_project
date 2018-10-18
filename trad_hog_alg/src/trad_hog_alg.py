@@ -91,8 +91,8 @@ for data in range(len(image)):
         # CONVERT TO GRAYSCALE OR HSV HERE
         h = hog.compute(res)
         hog_features.append(h)
-print 'D. HOG computed'
-print np.shape(hog_features)
+print 'D. HOG computed for positive images'
+# print np.shape(hog_features)
 
 ## 4.0 READ PATH OF NEGATIVE IMAGES
 training_path_negative = '../input_training_negative'
@@ -104,7 +104,6 @@ os.chdir(training_path_negative)
 print 'Located at:',os.getcwd()
 
 ## 4.1 READ ALL NEGATIVE IMAGES
-#6.2 Read images
 image_list_n = []
 image_n = []
 valid_images = [".jpg"]
@@ -118,7 +117,14 @@ for val in range(len(image_list_n)):
 print 'E. Negative Images list created'
 #print np.shape(image_n)
 
+# 5 COMPUTE HOG FOR NEGATIVE IMAGES AND APPEND IT TO ALL HOGS(chould it be converted to HSV or grayscale??)
+for data in range(len(image_list_n)):
+    # convert to HSV or Grayscale here
+    h = hog.compute(image_n[data])
+    hog_features.append(h)
+print 'F. HOG computed for negative images'
 
+print 'TOTAL HOG FEATURES = ', np.shape(hog_features)
 
 
 
