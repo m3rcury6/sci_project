@@ -92,7 +92,7 @@ for data in range(len(image)):
         h = hog.compute(res)
         hog_features.append(h)
 print 'D. HOG computed for positive images'
-# print np.shape(hog_features)
+positive_images = np.shape(hog_features)
 
 ## 4.0 READ PATH OF NEGATIVE IMAGES
 training_path_negative = '../input_training_negative'
@@ -115,9 +115,9 @@ image_list_n.sort()
 for val in range(len(image_list_n)):
     image_n.append(cv2.imread(str(image_list_n[val]), 1))
 print 'E. Negative Images list created'
-#print np.shape(image_n)
+negative_images = np.shape(image_n)
 
-# 5 COMPUTE HOG FOR NEGATIVE IMAGES AND APPEND IT TO ALL HOGS(chould it be converted to HSV or grayscale??)
+## 5. COMPUTE HOG FOR NEGATIVE IMAGES AND APPEND IT TO ALL HOGS(chould it be converted to HSV or grayscale??)
 for data in range(len(image_list_n)):
     # convert to HSV or Grayscale here
     h = hog.compute(image_n[data])
@@ -126,7 +126,24 @@ print 'F. HOG computed for negative images'
 
 print 'TOTAL HOG FEATURES = ', np.shape(hog_features)
 
+## 6. CREATE AND TRAIN SVM
+hog_samples = np.array(hog_features, dtype = np.float32)
+positive_class = np.ones((positive_images[0], ), dtype = np.int32)
+negative_class = np.zeros((negative_images[0], ), dtype = np.int32)
+hog_class = np.append(positive_class, negative_class)
+#hog_class = hog_class.reshape((-1,1))
+#print np.shape(hog_samples)
+#print np.shape(hog_class)
 
+clf = cv2.ml.SVM_create()
+#clf.setGamma(1)
+clf.setC(1)
+#clf.setNu(0.1)
+clf.setKernel(cv2.ml.SVM_LINEAR)
+clf.setType(cv2.ml.SVM_C_SVC)
+clf.train(hog_samples, cv2.ml.ROW_SAMPLE, hog_class)
+#clf.trainAuto(hog_samples, kFold=3, hog_class)
+print 'G. SVM is trained'
 
 
 
