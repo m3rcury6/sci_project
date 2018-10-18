@@ -30,7 +30,29 @@ else:
 os.chdir(training_path_positive)
 print 'Located at:',os.getcwd()
 
-
+## 2.1 READ ALL POSITIVE IMAGE AND LABEL FILES, SORT THESE FILES, CREATE AN ARRAY OF ALL IMAGES AND LABELS
+image_list = []         # array of names all valid images files
+text_list = []          # array of names all valid label files
+image = []              # array of opened image data (cv2 format)
+matrix = []             # array of labelled data
+valid_images = [".jpg"]
+valid_txtfiles = [".txt"]
+# Required arrays created
+for filename in os.listdir(training_path_positive):
+    ext = os.path.splitext(filename)[1]
+    if ext.lower() in valid_images:
+        image_list.append(filename)
+    elif ext.lower() in valid_txtfiles:
+        text_list.append(filename)
+# You have list of image names and text files
+# print 'Image names and Text files List created'
+image_list.sort()
+text_list.sort()
+for val in range(len(image_list)):
+    image.append(cv2.imread(str(image_list[val]), 1))
+    matrix.append(np.loadtxt(str(text_list[val])))
+# at this point, have list of image content (cv2 arrays) and image co-ordinates
+print 'Positive Images and Cone Data obtained'
 
 
 
