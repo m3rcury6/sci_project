@@ -137,7 +137,7 @@ hog_class = np.append(positive_class, negative_class)
 
 clf = cv2.ml.SVM_create()
 #clf.setGamma(1)
-clf.setC(1)
+clf.setC(2.3)
 #clf.setNu(0.1)
 clf.setKernel(cv2.ml.SVM_LINEAR)
 clf.setType(cv2.ml.SVM_C_SVC)
