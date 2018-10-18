@@ -2,23 +2,27 @@
 
 '''
 Authors: Kris Gonzalez, Nitin Nayak
-Objective: simple color detection for cone in order to start testing counter node
+Objective: Cone detection using Histogram of Gradients (HOG) with traditional machine learning method, Support Vector Method (SVM)
 '''
 
-#NN_NOTE: Init: clear this out
-import rospy
-import time
+## 1. INITIALIZATIONS
+#import rospy
+#import time
 import cv2
-from sys import argv
+#from sys import argv
 import numpy as np
 import os
-from cv_bridge import CvBridge
-from sensor_msgs.msg import Image
-from std_msgs.msg import String
+#from cv_bridge import CvBridge
+#from sensor_msgs.msg import Image
+#from std_msgs.msg import String
 
-from skimage.feature import hog
-from skimage import data, exposure
-import common_tools.lib_tools as lib
+#from skimage.feature import hog
+#from skimage import data, exposure
+import common_tools.lib_tools as lib                            # self-developed library of functions
+from imutils.object_detection import non_max_suppression        # used for NMS of rectangles after detection
+
+
+
 
 
 
