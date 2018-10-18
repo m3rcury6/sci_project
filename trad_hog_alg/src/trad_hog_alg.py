@@ -28,7 +28,7 @@ if(not os.path.exists(training_path_positive)):
 else:
     print 'Success: read training_path found.'
 os.chdir(training_path_positive)
-print 'Located at:',os.getcwd()
+print 'A. Located at:',os.getcwd()
 
 ## 2.1 READ ALL POSITIVE IMAGE AND LABEL FILES, SORT THESE FILES, CREATE AN ARRAY OF ALL IMAGES AND LABELS
 image_list = []         # array of names all valid images files
@@ -52,7 +52,7 @@ for val in range(len(image_list)):
     image.append(cv2.imread(str(image_list[val]), 1))
     matrix.append(np.loadtxt(str(text_list[val])))
 # at this point, have list of image content (cv2 arrays) and image co-ordinates
-print 'Positive Images and Cone Data obtained'
+print 'B. Positive Images and Cone Data obtained'
 
 ## 2.2 EXTRACT BLUE CONES FROM THE IMAGES USING THE LABEL FILES
 # 2.2.1 Get the ROIs in the images
@@ -79,7 +79,21 @@ for values in range(len(roi_val)):
         box = np.row_stack((box,new))
     box = box.astype(int)   # co-ordinates need to be in int for pixels
     boxes.append(box)       # array of co-ord arrays for each image
-print 'ROI co-ordinates obtained'
+print 'C. ROI co-ordinates obtained'
+
+## 3. COMPUTE HOG FOR POSITIVE IMAGES (chould it be converted to HSV or grayscale??)
+hog = cv2.HOGDescriptor()
+hog_features = []
+for data in range(len(image)):
+    for ibox in boxes[data]:
+        image[data] = cv2.rectangle(image[data],tuple(ibox[:2]),tuple(ibox[2:]),(255,0,0))
+        cone = image[data][ibox[1]:ibox[3], ibox[0]:ibox[2]]
+        res = cv2.resize(cone, (64, 128))
+        # CONVERT TO GRAYSCALE OR HSV HERE
+        h = hog.compute(res)
+        hog_features.append(h)
+print 'D. HOG computed'
+print np.shape(hog_features)
 
 
 # Gets HOG of image
