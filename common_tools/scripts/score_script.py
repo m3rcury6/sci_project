@@ -39,7 +39,7 @@ for iname in names:
     img=cv2.imread(iname+'.jpg')
     bbt=b.getBoxes(iname+'.txt',img.shape)
     bbp=b.getBoxes(iname+'.pred',img.shape)
-    (i_iou,ifp,ifn) = b.calcEachIOU(bbt,bbp)
+    (i_iou,ifp,ifn,_) = b.calcEachIOU(bbt,bbp)
     print iname,'| FP:',ifp,'| FN:',ifn,'| nIOU:',len(i_iou)
     f.write(iname+'.jpg,')
     f.write(str(ifp)+','+str(ifn))
