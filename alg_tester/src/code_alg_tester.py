@@ -128,7 +128,7 @@ print 'publishing images...'
 # exit()
 
 val = 0    #kills ROS node once finished with all images
-max_wait_time=3.0 #seconds
+max_wait_time=10.0 #seconds
 
 # going to try publishing initial image to get things going...
 # not sure why, but first image published seems to not send or be lost in buffer
