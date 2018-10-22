@@ -1,10 +1,9 @@
 <launch>
-	<arg name="training_path_positive"  default = "$(find trad_hog_alg)/../../input_training_positive/"/>
-	<arg name="training_path_negative"  default = "$(find trad_hog_alg)/../../input_training_negative/"/>
+	<arg name="input_testing_set"  default = "$(find trad_hog_alg)/../../input_testing_set/"/>
 	<node name="hog_algorithm_node"
 				pkg="trad_hog_alg"
 				type="trad_hog_alg.py"
-				args="$(arg training_path_positive) $(arg training_path_negative)"
+				args="$(arg input_testing_set)"
 				output="screen">
 	</node>
 </launch>
