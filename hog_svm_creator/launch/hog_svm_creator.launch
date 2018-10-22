@@ -1,0 +1,10 @@
+<launch>
+	<arg name="training_path_positive"  default = "$(find trad_hog_alg)/../../input_training_positive/"/>
+	<arg name="training_path_negative"  default = "$(find trad_hog_alg)/../../input_training_negative/"/>
+	<node name="hog_svm_creator"
+				pkg="hog_svm_creator"
+				type="hog_svm_creator.py"
+				args="$(arg training_path_positive) $(arg training_path_negative)"
+				output="screen">
+	</node>
+</launch>
