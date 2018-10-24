@@ -1,5 +1,5 @@
 <launch>
-	<arg name="input_testing_set"  default = "$(find trad_hog_alg)/../../input_testing_set/"/>
+	<arg name="input_testing_set"  default = "$(find trad_hog_alg)/../../input/"/>
 	<node name="hog_algorithm_node"
 				pkg="trad_hog_alg"
 				type="trad_hog_alg.py"

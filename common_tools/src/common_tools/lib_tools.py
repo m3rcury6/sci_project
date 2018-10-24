@@ -70,7 +70,7 @@ def getBoxes(boxfile,img_shape,onlyBlue=True):
     f.close()
     return boxes.astype(int) # return as integer values
 
-def putBoxes(img,box_array,txtCount=False,color=(250,0,0)):
+def putBoxes(img,box_array,txtCount=False,color=(250,0,0),width=2):
     ''' Objective: Return image with augmented information
 
         ARGUMENTS:
@@ -87,7 +87,7 @@ def putBoxes(img,box_array,txtCount=False,color=(250,0,0)):
     imgnew=img.copy()
     for ibox in box_array:
         icount=icount+1
-        imgnew=cv2.rectangle(imgnew,tuple(ibox[:2]),tuple(ibox[2:]),color)
+        imgnew=cv2.rectangle(imgnew,tuple(ibox[:2]),tuple(ibox[2:]),color,thickness = width)
         if(txtCount==True):
             FONT=cv2.FONT_HERSHEY_PLAIN
             imgnew=cv2.putText(imgnew,str(icount),tuple(ibox[:2]+np.array([0,-2])),FONT,1,color)

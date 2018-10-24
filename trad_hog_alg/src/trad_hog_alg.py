@@ -24,10 +24,12 @@ import time
 ## 2. Load .xml file of SVM classifier
 path = argv[1]
 if(not os.path.exists(path)):
-    print "Error, path below doesn't exist."
+    print "Error, path below doesn't exist:",path
+    exit()
 else:
-    print 'Success: path found.'
-os.chdir(path)
+    os.chdir(path)
+    print 'Success, path found:',os.getcwd()
+
 clf = cv2.ml.SVM_load('../HOG_svm_model.xml')
 print 'SVM Classifier .xml file successfully loaded'
 
@@ -44,22 +46,23 @@ imgname = ""
 
 def image_callback(data):
     global dnet
-    img = CvBridge().imgmsg_to_cv2(data,"bgr8")                                                                         # reconvert to cv2
-    img = cv2.resize(img, (0,0), fx=2, fy=2)                                                                            # resize for better detection
-    orig = img.copy()                                                                                                   #save copy - MAY BE REMOVED
+    img = CvBridge().imgmsg_to_cv2(data,"bgr8") # reconvert to cv2
+    img = cv2.resize(img, (0,0), fx=2, fy=2) # resize for better detection
+    imshape=img.shape
+    orig = img.copy() #save copy - MAY BE REMOVED
     (rects, weights) = hog.detectMultiScale(img, winStride=(16, 16), padding=(0, 0), scale=1.2, finalThreshold = 1)     # detect the cones
-    num_of_detections = len(rects)                                                                                      # number of cones detected (very high false positives)
-    print num_of_detections                                                                                             # MAY BE REMOVED
+    num_of_detections = len(rects) # number of cones detected (very high false positives)
+    print num_of_detections # MAY BE REMOVED
     rects = np.array([[x, y, x + w, y + h] for (x, y, w, h) in rects])                                                  # prepare for NMS
     pick = non_max_suppression(rects, probs=None, overlapThresh=0.0)                                                    # perform NMS
     #pick = cv2.resize(pick, (0,0), fx=0.5, fy=0.5)                                                                     # resize back to original size
-    dnet = lb.pixx2dnet(pick, np.shape(pick))                                                                           # convert pixels to dnet format
+    dnet = lb.pixx2dnet(pick, imshape) # convert pixels to dnet format
     publish_bbox(dnet)                                                                                                  # publish dnet as bbox
 
 def image_name_callback(data):
     global imgname
-    imgname = data
-    print 'publishing:',imgname
+    imgname = data.data
+    print 'received:',imgname
 
 def publish_bbox(para):
     msgs = bbox_array() # generate new, empty custom message array
@@ -72,6 +75,8 @@ def publish_bbox(para):
         msgs.bboxes.append(imsg)
         # don't need to touch the other items (Class, prob)
     # forloop conversion
+    global imgname
+    print type(imgname)
     msgs.header.frame_id = imgname # IMPORTANT: TRANSMIT IMAGE NAME HERE
     pub_bboxes.publish(msgs) # when ready, publish custom message array
     print "published!!"
