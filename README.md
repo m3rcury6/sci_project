@@ -2,8 +2,8 @@
 ROS-based comparison for computer vision algorithms
 
 ## Authors
-Kristian Gonzalez, Masters Mechatronics, Hochschule Ravensburg Weingarten
-Nitin Nayak, Masters Mechatronics, Hochschule Ravensburg Weingarten
+- Kristian Gonzalez, Masters Mechatronics, Hochschule Ravensburg Weingarten
+- Nitin Nayak, Masters Mechatronics, Hochschule Ravensburg Weingarten
 
 ## Objective
 We built this repository as part of our scientific project work at HRW. The repository serves to develop and test multiple object detection algorithms under the same conditions. 
